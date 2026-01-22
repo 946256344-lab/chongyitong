@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// 1. 导入 Script 组件
+import Script from 'next/script';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,24 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+
+        {/* --- Google Analytics 开始 --- */}
+        {/* 加载外部脚本 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YG4VJ87GL1"
+          strategy="afterInteractive"
+        />
+        {/* 执行初始化脚本 */}
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-YG4VJ87GL1');
+          `}
+        </Script>
+        {/* --- Google Analytics 结束 --- */}
       </body>
     </html>
   );
