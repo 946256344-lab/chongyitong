@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 const locales = ["en", "zh"];
 const defaultLocale = "zh";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 如果路径里已经包含了语言 (例如 /en/...) 或者请求的是图片/api，就不管它
