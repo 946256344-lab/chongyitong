@@ -1,8 +1,20 @@
 {
+  "seo": {
+    "title": "Pet Med-Pal | Your Smart Pet Health Decision Assistant",
+    "description": "Confused by pet medical reports? Pet Med-Pal helps you understand them, provides professional treatment advice, and facilitates smooth communication with your vet.",
+    "keywords": [
+      "pet health",
+      "severe pet condition",
+      "veterinary advice",
+      "pet medical report",
+      "cat health",
+      "dog health"
+    ]
+  },
   "slogan": "PetMed Navigator | Decision Assistant",
   "subSlogan": "Understand veterinary medical reports, evaluate treatment options rationally, and communicate with your vet with confidence",
   "emailPlaceholder": "Your email address (used to receive the report)",
-  "descPlaceholder": "Please describe your pet’s condition, quality of life, budget, etc.",
+  "descPlaceholder": "Please describe your pet's condition, quality of life, budget, etc.",
   "uploadBtn": "Upload Image",
   "uploaded": "Image uploaded",
   "uploading": "Uploading...",
@@ -26,10 +38,10 @@
   "guide": {
     "title": "How It Works",
     "p1": "Welcome to PetMed Navigator | Decision Assistant. Please follow the steps below:",
-    "step1": "Upload or paste your pet’s medical report (blood tests, imaging, or veterinary conclusions are all acceptable)",
-    "step2": "Briefly describe your pet’s situation (age, symptoms, quality of life, and your budget)",
+    "step1": "Upload or paste your pet's medical report (blood tests, imaging, or veterinary conclusions are all acceptable)",
+    "step2": "Briefly describe your pet's situation (age, symptoms, quality of life, and your budget)",
     "step3": "After submission, you will receive a personalized \"Decision Guide\"",
-    "step4": "The \"Decision Guide\" includes: 1) Plain-language interpretation of the medical report  2) Common prognosis and treatment pathway references  3) A checklist of key questions to discuss with your veterinarian",
+    "step4": "The \"Decision Guide\" includes: 1) Plain-language interpretation of the medical report 2) Common prognosis and treatment pathway references 3) A checklist of key questions to discuss with your veterinarian",
     "importantTitle": "Important Notes:",
     "importantDesc": "Reviewed by human specialists. Feedback is guaranteed within 24 hours.",
     "importantDesc2": "This tool is for understanding and communication support only and does not replace veterinary diagnosis.",
