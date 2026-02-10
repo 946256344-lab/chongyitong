@@ -46,5 +46,10 @@
     "importantDesc": "Reviewed by human specialists. Feedback is guaranteed within 24 hours.",
     "importantDesc2": "This tool is for understanding and communication support only and does not replace veterinary diagnosis.",
     "btn": "Got it"
+  },
+  "nav": {
+    "home": "Home",
+    "cases": "Case Reports",
+    "community": "Community"
   }
 }

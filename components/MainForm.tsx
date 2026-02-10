@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import React from 'react';
 import { Search, Clock, Sparkles, Image as ImageIcon, Send, Settings, User, Globe, Github, Twitter, Disc ,CheckCircle,HelpCircle, X} from 'lucide-react';
 import { Dictionary } from '@/app/dictionaries';
-
+import Link from 'next/link';
 export default function MainForm({ dict, lang }: { dict: Dictionary, lang: string }) {
  const fileInputRef = useRef<HTMLInputElement>(null);
  const router = useRouter();
@@ -98,41 +98,6 @@ const pushKey = process.env.NEXT_PUBLIC_PUSHDEER_KEY;
     <div className="flex h-screen bg-white text-gray-800 font-sans">
       
 {/* --- 顶部导航栏 --- */}
-<header className="fixed top-0 left-0 right-0 h-16 bg-white/80 backdrop-blur-md border-b border-gray-100 z-40">
-  <div className="max-w-5xl mx-auto h-full px-4 flex items-center justify-between">
-    {/* 左侧：Logo 或 标题 */}
-    <div className="flex items-center gap-2 font-bold text-xl tracking-tight text-gray-800">
-      <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-      T
-      </div>
-      <span>{dict.slogan}</span>
-    </div>
-
-    {/* 中间：主菜单（居中） */}
-    <div className="flex justify-center">
-      <button 
-        onClick={() => setShowGuide(true)}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100/80 hover:bg-gray-200/80 text-gray-700 rounded-full transition-all text-sm font-medium whitespace-nowrap"
-      >
-        <HelpCircle size={15} className="text-blue-500" />
-        {dict.historyBtn}
-      </button>
-    </div>
-
-    {/* 右侧：语言切换 + 用户/设置 */}
-    <div className="flex items-center gap-3">
-      <button 
-        onClick={switchLanguage}
-        className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-bold hover:bg-gray-50 transition-colors"
-      >
-        {lang === 'zh' ? 'EN' : '中文'}
-      </button>
-      <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-        <User size={18} />
-      </div>
-    </div>
-  </div>
-</header>
 
       {/* 2. 主内容区域 (Main Content) */}
       <main className="flex-1 flex flex-col relative">
