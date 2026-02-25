@@ -50,9 +50,16 @@
     "btn": "我知道了"
   },
   
-  "nav": {
+   "nav": {
     "home": "首页",
     "cases": "案例报告",
     "community": "社区杂谈"
+  },
+  "cases": {
+    "title": "案例展示",
+    "subtitle": "探索 AI 的无限可能与实战应用",
+    "categoryDefault": "案例研究",
+    "notFound": "文章不存在"
   }
+
 }

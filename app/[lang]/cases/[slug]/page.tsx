@@ -8,8 +8,11 @@ export default async function CaseDetail({ params }: { params: Promise<{ lang: s
   const { lang, slug } = await params;
   const dict = await getDictionary(lang as 'en' | 'zh');
 
-  const filePath = path.join(process.cwd(), 'content/cases', `${slug}.md`);
-  if (!fs.existsSync(filePath)) return <div className="pt-40 text-center">文章不存在</div>;
+  const baseFilePath = path.join(process.cwd(), 'content/cases', `${slug}.md`);
+  const localizedFilePath = path.join(process.cwd(), 'content/cases', lang, `${slug}.md`);
+  const filePath = fs.existsSync(localizedFilePath) ? localizedFilePath : baseFilePath;
+
+  if (!fs.existsSync(filePath)) return <div className="pt-40 text-center">{dict.cases.notFound}</div>;
 
   const fileContent = fs.readFileSync(filePath, 'utf8');
   const { data, content } = matter(fileContent);

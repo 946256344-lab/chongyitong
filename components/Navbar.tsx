@@ -3,17 +3,29 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HelpCircle, User } from 'lucide-react';
 import { useState } from 'react'; // 新增
+import en from '@/dictionaries/en.json';
+import zh from '@/dictionaries/zh.json';
+
 import GuideModal from './GuideModal'; // 引入刚才写的组件
 export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
     const [isGuideOpen, setIsGuideOpen] = useState(false);
   const pathname = usePathname();
+  const pathLang = pathname?.split('/')[1];
+  const currentLang = pathLang === 'en' || pathLang === 'zh' ? pathLang : lang;
+  const uiDict = currentLang === 'en' ? en : zh;
+
 
   // 导航链接配置
-  const navLinks = [
-    { name: '首页', href: `/${lang}` },
-    { name: '案例报告', href: `/${lang}/cases` },
-    { name: '社区杂谈', href: `/${lang}/community` },
+   const navLinks = [
+    { name: uiDict?.nav?.home, href: `/${currentLang}` },
+    { name: uiDict?.nav?.cases, href: `/${currentLang}/cases` },
+    { name: uiDict?.nav?.community, href: `/${currentLang}/community` },
   ];
+  const [brandMain, brandSub] = String(uiDict?.slogan ?? '')
+    .split(/[|｜]/)
+    .map((part) => part.trim());
+
+
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
@@ -25,9 +37,16 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
             <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
               T
             </div>
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">
-              宠医通 <span className="text-gray-300 font-light mx-1">|</span> <span className="text-gray-500 font-medium">决策助手</span>
+                        <span className="text-xl font-bold text-gray-900 hidden sm:block">
+              {brandMain || dict?.slogan}
+              {brandSub && (
+                <>
+                  <span className="text-gray-300 font-light mx-1">|</span>
+                  <span className="text-gray-500 font-medium">{brandSub}</span>
+                </>
+              )}
             </span>
+
           </Link>
         </div>
 
@@ -62,8 +81,10 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
           onClick={() => setIsGuideOpen(true)}
           className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-50/50 text-blue-600 rounded-full text-sm font-medium hover:bg-blue-50 transition-colors"
         >
-          <HelpCircle size={18} />
-          使用说明
+                  <HelpCircle size={18} />
+                   {uiDict?.historyBtn}
+
+
         </button>
           <div className="h-6 w-[1px] bg-gray-100 mx-2 hidden sm:block" />
 
@@ -83,7 +104,8 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
     segments[1] = 'zh';
   } else {
     // 3. 安全兜底：如果路径里没带语言前缀（比如直接访问根目录），则补上相反的语言
-    segments.splice(1, 0, lang === 'zh' ? 'en' : 'zh');
+       segments.splice(1, 0, currentLang === 'zh' ? 'en' : 'zh');
+
   }
 
   // 4. 重新组合并跳转
@@ -91,7 +113,8 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
 }}
   className="w-10 h-10 flex items-center justify-center text-xs font-bold text-gray-500 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors uppercase"
 >
-  {lang === 'zh' ? 'EN' : '中文'}
+   {currentLang === 'zh' ? 'EN' : '中文'}
+
 </button>
              <button className="w-10 h-10 bg-gray-900 flex items-center justify-center rounded-xl text-white hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
                <User size={20} />
@@ -101,11 +124,12 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
       </div>
 
       {/* 放置弹窗组件 */}
-      <GuideModal 
-        isOpen={isGuideOpen} 
-        onClose={() => setIsGuideOpen(false)} 
-        dict={dict} 
-      />
+    <GuideModal 
+  isOpen={isGuideOpen} 
+  onClose={() => setIsGuideOpen(false)} 
+  dict={uiDict} 
+/>
+
     </header>
   );
 }

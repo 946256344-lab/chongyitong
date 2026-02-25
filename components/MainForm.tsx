@@ -209,7 +209,7 @@ const pushKey = process.env.NEXT_PUBLIC_PUSHDEER_KEY;
           
           <div className="mt-4 flex gap-4 text-xs text-gray-400">
             <span className="hover:underline cursor-pointer">Privacy Policy</span>
-            <span className="hover:underline cursor-pointer">Terms of Service</span>
+            <Link href={`/${lang}/terms`} className="hover:underline">Terms of Service</Link>
           </div>
 
         </div>

@@ -19,7 +19,8 @@ export default function GuideModal({ isOpen, onClose, dict }: { isOpen: boolean;
     <div className="relative bg-white rounded-[28px] shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-300 translate-y-100">
       {/* 头部 */}
       <div className="p-6 border-b border-gray-50  items-center justify-between">
-        <h3 className="text-xl font-bold text-gray-900">使用说明</h3>
+                <h3 className="text-xl font-bold text-gray-900">{dict?.guide?.title}</h3>
+
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full"
@@ -46,14 +47,16 @@ export default function GuideModal({ isOpen, onClose, dict }: { isOpen: boolean;
 
         {/* 底部按钮 */}
         <div className="p-6 bg-gray-50 border-t border-gray-100 text-center">
-          <button 
+                    <button 
             onClick={onClose}
             className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition-all active:scale-95"
           >
-            开始使用
+            {dict?.guide?.btn}
           </button>
+
         </div>
       </div>
     </div>
+    
   );
 }

@@ -9,10 +9,13 @@ export default async function CasesPage({ params }: { params: Promise<{ lang: st
   const { lang } = await params;
   const dict = await getDictionary(lang as 'en' | 'zh');
 
-  const contentPath = path.join(process.cwd(), 'content/cases');
+    const baseContentPath = path.join(process.cwd(), 'content/cases');
+  const localizedContentPath = path.join(baseContentPath, lang);
+  const contentPath = fs.existsSync(localizedContentPath) ? localizedContentPath : baseContentPath;
   if (!fs.existsSync(contentPath)) fs.mkdirSync(contentPath, { recursive: true });
-  
-  const files = fs.readdirSync(contentPath);
+
+  const files = fs.readdirSync(contentPath).filter((fileName) => fileName.endsWith('.md'));
+
   const posts = files.map((fileName) => {
     const slug = fileName.replace('.md', '');
     const fileContent = fs.readFileSync(path.join(contentPath, fileName), 'utf8');
@@ -27,8 +30,10 @@ export default async function CasesPage({ params }: { params: Promise<{ lang: st
         
         {/* 标题区 */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold text-[#2d334a] mb-4 tracking-tight">案例展示</h1>
-          <p className="text-gray-400 text-lg">探索 AI 的无限可能与实战应用</p>
+         <h1 className="text-4xl font-extrabold text-[#2d334a] mb-4 tracking-tight">{dict.cases.title}</h1>
+<p className="text-gray-400 text-lg">{dict.cases.subtitle}</p>
+
+
         </div>
 
         {/* 列表容器 */}
@@ -41,7 +46,8 @@ export default async function CasesPage({ params }: { params: Promise<{ lang: st
                 <div className="flex-1 pr-8">
                   <div className="flex items-center gap-4 mb-4">
                     <span className="px-4 py-1.5 bg-blue-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
-                      {post.category || 'CASE STUDY'}
+                     {post.category || dict.cases.categoryDefault}
+
                     </span>
                     <div className="flex items-center gap-1.5 text-gray-400 text-sm">
                       <Calendar size={14} />

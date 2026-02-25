@@ -47,9 +47,16 @@
     "importantDesc2": "This tool is for understanding and communication support only and does not replace veterinary diagnosis.",
     "btn": "Got it"
   },
-  "nav": {
+   "nav": {
     "home": "Home",
     "cases": "Case Reports",
     "community": "Community"
+  },
+  "cases": {
+    "title": "Case Studies",
+    "subtitle": "Explore AI's limitless possibilities and real-world applications",
+    "categoryDefault": "CASE STUDY",
+    "notFound": "Article not found"
   }
+
 }

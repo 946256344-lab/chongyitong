@@ -4,7 +4,7 @@ import "./globals.css";
 // 1. 导入 Script 组件 (保留你原有的)
 import Script from 'next/script';
 // 2. 导入新写的导航组件 (新增)
-
+import Link from 'next/link';
 import { getDictionary } from "./dictionaries"; // 确保路径正确
 import Navbar from "@/components/Navbar";
 const geistSans = Geist({
@@ -46,6 +46,13 @@ export default async function RootLayout({
         <main className="flex-grow">
           {children}
         </main>
+
+        {/* --- 页脚 --- */}
+        <footer className="border-t border-gray-100 py-5 text-center text-sm text-gray-400">
+          <Link href={`/${lang}/terms`} className="hover:text-gray-600 transition-colors">
+            {lang === 'zh' ? '服务条款' : 'Terms of Service'}
+          </Link>
+        </footer>
 
         {/* --- Google Analytics 开始 (保留你的原代码) --- */}
         <Script
