@@ -75,13 +75,12 @@ const handleSubmit = async () => {
       ]);
 
     if (error) throw error;
-const pushKey = process.env.NEXT_PUBLIC_PUSHDEER_KEY;
-    const title = encodeURIComponent("🔔 收到新需求！");
-    const content = encodeURIComponent(`用户邮箱: ${email}\n需求描述: ${description}\n图片地址: ${imageUrl}`);
-    
-    // 无需等待结果，直接异步触发即可（不影响用户体验）
-    fetch(`https://api2.pushdeer.com/message/push?pushkey=${pushKey}&text=${title}&desp=${content}`)
-      .catch(err => console.error("通知发送失败", err));
+    // 通过服务端 API Route 发送通知，避免 CORS 问题
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, description, imageUrl }),
+    }).catch(err => console.error('通知发送失败', err));
     alert(dict.uploaded);
     // 提交成功后清空输入框
     setIsSuccess(true);
