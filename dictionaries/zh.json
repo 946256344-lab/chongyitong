@@ -56,9 +56,15 @@
     "community": "社区杂谈"
   },
   "cases": {
-    "title": "案例展示",
-    "subtitle": "探索 AI 的无限可能与实战应用",
-    "categoryDefault": "案例研究",
+    "title": "案例报告",
+    "subtitle": "付费用户实际收到的专业分析报告示例",
+    "categoryDefault": "案例报告",
+    "notFound": "文章不存在"
+  },
+  "community": {
+    "title": "社区杂谈",
+    "subtitle": "来自真实宠物家庭的故事与经历",
+    "categoryDefault": "真实故事",
     "notFound": "文章不存在"
   }
 

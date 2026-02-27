@@ -53,9 +53,15 @@
     "community": "Community"
   },
   "cases": {
-    "title": "Case Studies",
-    "subtitle": "Explore AI's limitless possibilities and real-world applications",
-    "categoryDefault": "CASE STUDY",
+    "title": "Case Reports",
+    "subtitle": "Sample professional reports that paying customers actually receive",
+    "categoryDefault": "Case Report",
+    "notFound": "Article not found"
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Real stories from real pet families",
+    "categoryDefault": "Real Story",
     "notFound": "Article not found"
   }
 
