@@ -21,3 +21,31 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media print {
+  /* Preserve background colors in print */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide anything that shouldn't appear in the printed report */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Cover page forces a page break after it */
+  .report-cover {
+    break-after: page;
+  }
+
+  /* Prevent table rows from splitting across pages */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Remove page padding so the cover fills edge-to-edge */
+  @page {
+    margin: 12mm 14mm;
+  }
+}

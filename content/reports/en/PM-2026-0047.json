@@ -1,0 +1,109 @@
+{
+  "report_id": "PM-2026-0047",
+  "date": "2026-02-10",
+  "submitted": "Feb 10, 2026, 9:23 AM",
+  "completed": "Feb 10, 2026, 9:05 PM",
+  "diagnosis_plain": "Non-obstructive Hypertrophic Cardiomyopathy (HCM) — ACVIM Stage B1",
+  "pet": {
+    "breed": "British Shorthair",
+    "sex": "Male (neutered)",
+    "age": "6 years",
+    "weight": "5.8 kg (12.8 lbs)",
+    "chief_complaint": "Grade II heart murmur detected at annual exam; occasional mild rapid breathing",
+    "clinic": "Cardiology department, specialty veterinary hospital",
+    "report_type": "Echocardiogram (cardiac ultrasound)",
+    "vet": "Board-certified cardiologist",
+    "history": "No prior cardiac history; routine annual exam"
+  },
+  "summary": {
+    "severity": "Moderate concern — structural changes present, no symptoms yet",
+    "findings_count": "6 echocardiogram parameters reviewed",
+    "decision_window": "Non-urgent — 6-month monitoring window",
+    "prognosis": "Favorable at current stage; median survival >5 years for Stage B1",
+    "paths": "2 paths: Medical therapy (Atenolol) vs. Watchful waiting",
+    "priority_match": "Watchful waiting aligns with owner's preference to minimize stress",
+    "next_step": "Recheck echocardiogram in 6 months; monitor resting respiratory rate daily"
+  },
+  "findings": [
+    {
+      "name": "Interventricular Septum (IVSd)",
+      "value": "6.8 mm",
+      "range": "≤5.5 mm",
+      "deviation": "↑ Moderate",
+      "meaning": "Thickened — primary diagnostic criterion for HCM"
+    },
+    {
+      "name": "Left Ventricular Wall (LVPWd)",
+      "value": "6.2 mm",
+      "range": "≤5.5 mm",
+      "deviation": "↑ Moderate",
+      "meaning": "Thickened; symmetric hypertrophy pattern"
+    },
+    {
+      "name": "LV End-Systolic Diameter (LVIDs)",
+      "value": "8.5 mm",
+      "range": "Within range",
+      "deviation": "Normal",
+      "meaning": "Systolic function currently preserved"
+    },
+    {
+      "name": "Left Atrium / Aorta Ratio (LA/Ao)",
+      "value": "1.52",
+      "range": "<1.5",
+      "deviation": "↑ Mild",
+      "meaning": "Mildly elevated — left atrium beginning to enlarge"
+    },
+    {
+      "name": "Ejection Fraction (EF)",
+      "value": "68%",
+      "range": ">50%",
+      "deviation": "Normal",
+      "meaning": "Normal systolic function"
+    },
+    {
+      "name": "SAM (Systolic Anterior Motion)",
+      "value": "Negative",
+      "range": "Negative",
+      "deviation": "Normal",
+      "meaning": "No outflow obstruction; beta-blockers not indicated"
+    }
+  ],
+  "paths": [
+    {
+      "label": "Option A",
+      "approach": "Medical Therapy (Atenolol)",
+      "survival": "Helps manage symptoms; no proven survival benefit at Stage B1",
+      "cost": "~$30–60/month (medication + monitoring)",
+      "aligns": "Suitable for LA/Ao ≥1.5 with clinical symptoms; proactive owners",
+      "tensions": "Hypotension, bradycardia risk; requires dose titration; adds stress for anxious cats"
+    },
+    {
+      "label": "Option B",
+      "approach": "Watchful Waiting (No medication)",
+      "survival": "No evidence of harm; median survival >5 years at Stage B1",
+      "cost": "~$150–300/visit (echocardiogram every 6 months)",
+      "aligns": "ACVIM consensus for asymptomatic B1; reduces vet visits; aligns with owner's stress-minimization priority",
+      "tensions": "Risk of missing early progression if monitoring is inconsistent"
+    }
+  ],
+  "prognosis_bullets": [
+    "Asymptomatic HCM (Stage B1/B2): Median survival exceeds 5 years; many cats never progress to heart failure",
+    "Congestive heart failure (Stage C): Median survival ~6–18 months; requires urgent hospitalization and long-term diuretics",
+    "Aortic thromboembolism (ATE): Occurs in ~12–17% of HCM cats; one of the most dangerous complications",
+    "Key factors: rate of left atrial enlargement, ATE occurrence, and consistency of monitoring"
+  ],
+  "prognosis_note": "Mochi was caught at a relatively early stage — regular follow-up is the single most important intervention right now. The LA/Ao of 1.52 warrants close attention at the next recheck.",
+  "questions": [
+    "Given the LA/Ao of 1.52, do you recommend starting clopidogrel for thromboprophylaxis?",
+    "Should we add an NT-proBNP blood test to the monitoring plan?",
+    "How soon should the next recheck be? Is it important to use the same echocardiography machine for consistent measurements?",
+    "If I notice increased resting respiratory rate at home (>30 breaths/minute), should I go to an emergency clinic immediately?",
+    "HCM has a genetic component — should I have any littermates screened?",
+    "What everyday stressors should we minimize? (e.g., bathing, long-distance travel)"
+  ],
+  "sources": [
+    "ACVIM Consensus Guidelines for the Diagnosis and Treatment of Myxomatous Mitral Valve Disease in Dogs (2019)",
+    "Ferasin L. Feline myocardial disease. J Feline Med Surg. 2012",
+    "Payne JR et al. Prognostic indicators in cats with hypertrophic cardiomyopathy. J Vet Intern Med. 2013"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "report_id": "PM-2026-0047",
+  "date": "2026-02-10",
+  "submitted": "2026-02-10 09:23",
+  "completed": "2026-02-10 21:05",
+  "diagnosis_plain": "非梗阻性肥厚性心肌病（HCM）— ACVIM B1期",
+  "pet": {
+    "breed": "英国短毛猫",
+    "sex": "雄性已绝育",
+    "age": "6岁",
+    "weight": "5.8 kg",
+    "chief_complaint": "年度体检发现II级心脏杂音，偶发轻度急促呼吸",
+    "clinic": "专科动物医院心脏内科",
+    "report_type": "超声心动图（心脏超声）",
+    "vet": "心脏专科认证医生",
+    "history": "无心脏病史，常规年度体检发现"
+  },
+  "summary": {
+    "severity": "中度关注——已有结构变化，暂无临床症状",
+    "findings_count": "共解读6项超声心动图指标",
+    "decision_window": "非紧急——6个月监测窗口期",
+    "prognosis": "当前阶段预后良好；B1期中位生存期超过5年",
+    "paths": "2条路径：药物治疗（阿替洛尔）vs. 观察等待",
+    "priority_match": "观察等待与主人减少应激的核心诉求一致",
+    "next_step": "6个月后复查超声；每日监测静息呼吸频率"
+  },
+  "findings": [
+    {
+      "name": "室间隔厚度（IVSd）",
+      "value": "6.8 mm",
+      "range": "≤5.5 mm",
+      "deviation": "↑ 中度",
+      "meaning": "增厚——HCM首要诊断标准"
+    },
+    {
+      "name": "左室后壁厚度（LVPWd）",
+      "value": "6.2 mm",
+      "range": "≤5.5 mm",
+      "deviation": "↑ 中度",
+      "meaning": "增厚；对称性肥厚形态"
+    },
+    {
+      "name": "左室收缩末期内径（LVIDs）",
+      "value": "8.5 mm",
+      "range": "正常范围内",
+      "deviation": "正常",
+      "meaning": "收缩功能目前正常"
+    },
+    {
+      "name": "左房/主动脉比值（LA/Ao）",
+      "value": "1.52",
+      "range": "<1.5",
+      "deviation": "↑ 轻度",
+      "meaning": "轻度偏高——左心房开始扩大"
+    },
+    {
+      "name": "射血分数（EF）",
+      "value": "68%",
+      "range": ">50%",
+      "deviation": "正常",
+      "meaning": "收缩功能正常"
+    },
+    {
+      "name": "收缩期前向运动（SAM）",
+      "value": "阴性",
+      "range": "阴性",
+      "deviation": "正常",
+      "meaning": "无流出道梗阻；无需使用β阻滞剂"
+    }
+  ],
+  "paths": [
+    {
+      "label": "方案A",
+      "approach": "药物治疗（阿替洛尔）",
+      "survival": "有助于症状管理；B1期尚无证据证明改善生存期",
+      "cost": "约$30–60/月（药物+监测）",
+      "aligns": "适用于LA/Ao≥1.5且有临床症状；主动干预型主人",
+      "tensions": "低血压、心动过缓风险；需调整剂量；对焦虑猫增加应激"
+    },
+    {
+      "label": "方案B",
+      "approach": "观察等待（暂不用药）",
+      "survival": "无证据显示有害；B1期中位生存期超过5年",
+      "cost": "约$150–300/次（每6个月超声复查）",
+      "aligns": "符合ACVIM无症状B1期指南；减少就诊次数；契合主人减压诉求",
+      "tensions": "若监测不规律，可能错过早期进展信号"
+    }
+  ],
+  "prognosis_bullets": [
+    "无症状HCM（B1/B2期）：中位生存期超过5年，许多猫终身不发展为心衰",
+    "充血性心衰（C期，肺水肿出现）：中位生存期约6–18个月，需紧急住院和长期利尿剂维持",
+    "主动脉血栓栓塞（ATE）：发生率约12–17%，是HCM最危险的并发症之一，需立即急救",
+    "关键预后因素：左心房扩大速率、是否发生ATE、监测规律性"
+  ],
+  "prognosis_note": "摩奇在相对早期被发现——规律复查是目前最重要的干预措施。LA/Ao 1.52需在下次复查中重点关注变化趋势。",
+  "questions": [
+    "LA/Ao已达1.52，是否建议开始使用氯吡格雷预防血栓？",
+    "监测计划中是否应增加NT-proBNP血液检测？",
+    "下次复查应该多久后进行？用同一台超声仪器检测对数据一致性是否重要？",
+    "如果在家发现静息呼吸频率超过30次/分钟，是否需要立即去急诊？",
+    "HCM有遗传因素——是否建议对同窝猫咪进行筛查？",
+    "日常生活中哪些应激源需要重点避免？（如洗澡、长途出行等）"
+  ],
+  "sources": [
+    "ACVIM Consensus Guidelines for the Diagnosis and Treatment of Myxomatous Mitral Valve Disease in Dogs (2019)",
+    "Ferasin L. Feline myocardial disease. J Feline Med Surg. 2012",
+    "Payne JR et al. Prognostic indicators in cats with hypertrophic cardiomyopathy. J Vet Intern Med. 2013"
+  ]
+}
