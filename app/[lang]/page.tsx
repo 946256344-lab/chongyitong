@@ -1,6 +1,16 @@
 import type { Metadata } from 'next';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 import { getDictionary } from '../dictionaries';
 import MainForm from '@/components/MainForm';
+
+export type FeaturedCase = {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+};
 
 type Props = {
   params: Promise<{ lang: 'en' | 'zh' }>;
@@ -22,16 +32,20 @@ export async function generateMetadata({
     keywords: ['宠物医疗', '宠物健康', '兽医咨询'],
   };
 
+  const appName = lang === 'zh' ? '宠医通 | 决策助手' : 'Pet Med-Pal | Decision Assistant';
+  const teamName = lang === 'zh' ? '宠医通团队' : 'Pet Med-Pal Team';
+  const siteName = lang === 'zh' ? '宠医通' : 'Pet Med-Pal';
+
   return {
-    applicationName: '宠医通 | 决策助手',
+    applicationName: appName,
     title: {
       default: seo.title,
-      template: '%s | 宠医通',
+      template: `%s | ${siteName}`,
     },
     description: seo.description,
-    authors: [{ name: '宠医通团队', url: BASE_URL }],
-    creator: '宠医通团队',
-    publisher: '宠医通',
+    authors: [{ name: teamName, url: BASE_URL }],
+    creator: teamName,
+    publisher: siteName,
     keywords: seo.keywords,
     icons: {
       icon: '/favicon.ico',
@@ -49,7 +63,7 @@ export async function generateMetadata({
       url: `/${lang}`,
       title: seo.title,
       description: seo.description,
-      siteName: '宠医通',
+      siteName: siteName,
       locale: lang === 'zh' ? 'zh_CN' : 'en_US',
     },
     twitter: {
@@ -73,8 +87,27 @@ export async function generateMetadata({
 
 export default async function Page({ params }: Props) {
   const { lang } = await params;
-
   const dict = await getDictionary(lang);
 
-  return <MainForm dict={dict} lang={lang} />;
+  const basePath = path.join(process.cwd(), 'content/cases');
+  const localizedPath = path.join(basePath, lang);
+  const contentPath = fs.existsSync(localizedPath) ? localizedPath : basePath;
+
+  const featuredCases: FeaturedCase[] = fs
+    .readdirSync(contentPath)
+    .filter((f) => f.endsWith('.md'))
+    .sort()
+    .slice(0, 2)
+    .map((fileName) => {
+      const slug = fileName.replace('.md', '');
+      const { data } = matter(fs.readFileSync(path.join(contentPath, fileName), 'utf8'));
+      return {
+        slug,
+        title: data.title ?? '',
+        description: data.description ?? '',
+        category: data.category ?? '',
+      };
+    });
+
+  return <MainForm dict={dict} lang={lang} featuredCases={featuredCases} />;
 }

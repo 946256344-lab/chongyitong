@@ -14,7 +14,7 @@
   "slogan": "PetMed Navigator | Decision Assistant",
   "subSlogan": "Understand veterinary medical reports, evaluate treatment options rationally, and communicate with your vet with confidence",
   "emailPlaceholder": "Your email address (used to receive the report)",
-  "descPlaceholder": "Please describe your pet's condition, quality of life, budget, etc.",
+  "descPlaceholder": "e.g. Cat diagnosed with HCM, occasional labored breathing, vet recommends medication...",
   "uploadBtn": "Upload Image",
   "uploaded": "Image uploaded",
   "uploading": "Uploading...",
@@ -34,6 +34,36 @@
   },
   "textarea ": {
     "ploading": "Uploading..."
+  },
+  "hero": {
+    "badge": "Expert-reviewed · Built for pet families",
+    "headlineBefore": "",
+    "headlineHighlight": "Clarity",
+    "headlineAfter": " when it matters most.",
+    "subline": "Upload your vet report. We translate the findings into plain language, map your treatment options, and prepare the questions you need to ask.",
+    "cta": "Submit your report",
+    "card1": "⚡ Results in 24h",
+    "card2": "✓ Expert-reviewed"
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "steps": [
+      { "num": "01", "title": "Upload the report", "desc": "Lab results, imaging, or vet notes — any format works" },
+      { "num": "02", "title": "A specialist reviews it", "desc": "Within 24 hours, we interpret the findings and map your options" },
+      { "num": "03", "title": "Bring the guide to your vet", "desc": "You receive a plain-language decision guide with key questions to ask" }
+    ]
+  },
+  "features": [
+    { "icon": "📋", "text": "Plain-language interpretation of your pet's medical report" },
+    { "icon": "🔀", "text": "Treatment path comparison with evidence-based prognosis data" },
+    { "icon": "💬", "text": "Key questions checklist to discuss with your vet" }
+  ],
+  "trust": {
+    "guarantee": "Not satisfied? Full refund within 24 hours"
+  },
+  "casesTeaser": {
+    "title": "See what a real report looks like",
+    "link": "View all case reports →"
   },
   "guide": {
     "title": "How It Works",
