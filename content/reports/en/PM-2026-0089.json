@@ -1,0 +1,127 @@
+{
+  "report_id": "PM-2026-0089",
+  "date": "2026-02-22",
+  "submitted": "Feb 22, 2026, 11:03 AM",
+  "completed": "Feb 22, 2026, 7:44 PM",
+  "diagnosis_plain": "Uncomplicated Diabetes Mellitus (Insulin-Dependent) — no ketoacidosis, stable at presentation",
+  "pet": {
+    "breed": "Golden Retriever",
+    "sex": "Female (spayed)",
+    "age": "8 years",
+    "weight": "30 kg (66 lbs)",
+    "chief_complaint": "3-week history of polyuria/polydipsia, weight loss ~2 kg despite polyphagia",
+    "clinic": "General practice veterinary clinic",
+    "report_type": "Serum biochemistry panel, CBC, urinalysis with sediment",
+    "vet": "General practice veterinarian",
+    "history": "No prior chronic illness; weight loss and increased thirst noticed 3–4 weeks ago; appetite remained strong throughout"
+  },
+  "summary": {
+    "severity": "Significant — chronic uncontrolled hyperglycemia; insulin therapy must begin immediately",
+    "findings_count": "6 key lab parameters reviewed",
+    "decision_window": "Start treatment now — uncomplicated DM at ideal window; delay increases DKA and cataract risk",
+    "prognosis": "Excellent with consistent insulin management; ~80% of dogs achieve stable regulation within 1–3 months",
+    "paths": "4 paths: Vetsulin · NPH (human insulin) · Glargine (off-label) · CGM home monitoring (add-on)",
+    "priority_match": "Vetsulin best fits stable long-term control goal; CGM add-on reduces clinic burden significantly",
+    "next_step": "Begin Vetsulin 0.25–0.5 U/kg BID with a consistent high-fiber diet; schedule first glucose curve at day 7–10"
+  },
+  "findings": [
+    {
+      "name": "Blood Glucose",
+      "value": "18.6 mmol/L (336 mg/dL)",
+      "range": "3.3–6.1 mmol/L",
+      "deviation": "↑ Severe",
+      "meaning": "Markedly elevated — confirms uncontrolled hyperglycemia consistent with diabetes mellitus"
+    },
+    {
+      "name": "Fructosamine",
+      "value": "520 μmol/L",
+      "range": "<340 μmol/L",
+      "deviation": "↑ Severe",
+      "meaning": "Reflects average blood glucose over the past 2–3 weeks — rules out stress hyperglycemia; confirms chronically elevated glucose"
+    },
+    {
+      "name": "Urine Glucose / Ketones",
+      "value": "Glucose 4+, Ketones negative",
+      "range": "Glucose negative, Ketones negative",
+      "deviation": "↑ Severe / Normal",
+      "meaning": "Glucose above renal threshold confirms DM; absence of ketones rules out diabetic ketoacidosis (DKA) — critical safety finding"
+    },
+    {
+      "name": "ALT (Liver Enzyme)",
+      "value": "156 U/L",
+      "range": "10–109 U/L",
+      "deviation": "↑ Mild",
+      "meaning": "Mildly elevated — secondary hepatic lipidosis from DM; expected to normalize with glucose control"
+    },
+    {
+      "name": "BUN / Creatinine",
+      "value": "Within normal limits",
+      "range": "Normal",
+      "deviation": "Normal",
+      "meaning": "Kidney function intact — no concurrent renal disease; does not restrict insulin dosing"
+    },
+    {
+      "name": "CBC — Neutrophils",
+      "value": "Mild neutrophilia",
+      "range": "Normal range",
+      "deviation": "↑ Mild",
+      "meaning": "Consistent with stress leukogram from chronic illness; no active infection identified requiring separate treatment"
+    }
+  ],
+  "paths": [
+    {
+      "label": "Option A",
+      "approach": "Vetsulin (Caninsulin) — Lente Insulin",
+      "survival": "Excellent; FDA-approved for canine DM; ~80% achieve stable regulation within 1–3 months; best long-term evidence base",
+      "cost": "$80–140/month (insulin + syringes)",
+      "aligns": "First-line standard; your vet will know the dosing protocol well; predictable 10–14 hour action curve; consistent BID schedule fits most households",
+      "tensions": "BID injections required; strict feeding schedule needed; glucose curves every 1–3 months initially; some dogs show variability in response"
+    },
+    {
+      "label": "Option B",
+      "approach": "NPH Insulin (Humulin N) — Off-Label Human Insulin",
+      "survival": "Good; comparable outcomes to Vetsulin in many dogs; widely used in cost-sensitive situations with appropriate monitoring",
+      "cost": "$25–50/month (available at human pharmacies)",
+      "aligns": "Significantly lower cost; some dogs respond equally or better to NPH; available at any pharmacy without vet order",
+      "tensions": "Off-label use (not FDA-approved for dogs); slightly shorter action duration (8–12 hrs) may require closer timing; same monitoring intensity as Vetsulin"
+    },
+    {
+      "label": "Option C",
+      "approach": "Glargine (Lantus) — Long-Acting Insulin (Off-Label)",
+      "survival": "Variable in dogs; better-suited to cats; some dogs need TID dosing for adequate control; limited canine-specific long-term data",
+      "cost": "$60–120/month",
+      "aligns": "Flatter action curve reduces peak hypoglycemia risk; useful if hypoglycemic episodes occur on other insulins",
+      "tensions": "Not standard first-line for dogs; less predictable in canine patients than in cats; insufficient canine outcome data; requires close monitoring during initiation"
+    },
+    {
+      "label": "Option D",
+      "approach": "CGM Home Monitoring (e.g., FreeStyle Libre 3)",
+      "survival": "Not a standalone treatment — significantly improves regulation accuracy when combined with any insulin protocol",
+      "cost": "$35–60 per sensor (14-day lifespan per sensor)",
+      "aligns": "Real-time glucose data replaces most spot-check glucose curves; dramatically reduces clinic visit frequency during dose adjustment phase",
+      "tensions": "Sensor placement on neck/flank requires practice; dogs may dislodge sensor; not all vets routinely support CGM data review; requires owner comfort with app-based monitoring"
+    }
+  ],
+  "prognosis_bullets": [
+    "Uncomplicated DM (no DKA, no concurrent illness): ~80% of dogs achieve stable glucose regulation within 1–3 months of insulin initiation",
+    "Median survival after diagnosis with good management: 2–3 years; many dogs with well-managed DM live 4–5+ years post-diagnosis",
+    "Cataracts develop in ~75% of diabetic dogs within 12 months — proactive discussion of preventive eye drops and surgical options is strongly advised",
+    "Concurrent conditions (hypothyroidism, Cushing's disease, UTI) frequently cause insulin resistance — screen every 6 months even when glucose appears controlled",
+    "Unlike cats, spontaneous insulin remission is rare in dogs — lifelong twice-daily insulin therapy is the realistic expectation"
+  ],
+  "prognosis_note": "Molly's presentation is encouraging: no ketoacidosis, stable vitals, and kidney function intact. Starting Vetsulin now with a consistent high-fiber diet gives her an excellent chance of long-term stable control. The cataract conversation is worth having with your vet now — by the time cataracts appear, the prevention window has passed.",
+  "questions": [
+    "What starting dose of Vetsulin do you recommend based on Molly's current glucose level and body weight?",
+    "When should we schedule the first in-clinic glucose curve — day 7 or day 10 after starting insulin?",
+    "Can I use a FreeStyle Libre 3 CGM sensor at home? Does your clinic support interpreting CGM data for insulin adjustments?",
+    "Should we screen for Cushing's disease or hypothyroidism now, or wait to see how she responds to insulin first?",
+    "What are the early signs of hypoglycemia I should watch for, and what should I do if I suspect it (e.g., rub Karo syrup on her gums)?",
+    "Is it worth starting topical anti-cataract eye drops now? What is the current evidence for aldose reductase inhibitors in dogs?",
+    "Once she is regulated, how often will she need glucose curves, and what is your target fructosamine range for a well-controlled dog?"
+  ],
+  "sources": [
+    "Behrend E, et al. ACVIM consensus statement: diagnosis of spontaneous canine hyperadrenocorticism. J Vet Intern Med. 2013;27(6):1292-1304",
+    "Gilor C, et al. Continuous glucose monitoring in dogs and cats with diabetes mellitus. J Vet Intern Med. 2016;30(4):1261-1272",
+    "Davison LJ. Diabetes mellitus and pancreatitis — cause or effect? J Small Anim Pract. 2015;56(1):50-59"
+  ]
+}

@@ -2,8 +2,47 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { getDictionary } from '../../dictionaries';
 import { Calendar, ChevronRight } from 'lucide-react';
+
+const BASE_URL = 'https://severepetcondition.site';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const isZh = lang === 'zh';
+  const title = isZh ? '真实案例 | 宠医通' : 'Case Reports | Pet Med-Pal';
+  const description = isZh
+    ? '真实宠物病例解读，帮助主人理解诊断结果、评估治疗选项，理性与兽医沟通。'
+    : 'Real pet case reports with expert interpretation — understand diagnoses, evaluate treatment options, and communicate confidently with your vet.';
+
+  return {
+    metadataBase: new URL(BASE_URL),
+    title,
+    description,
+    alternates: {
+      canonical: `/${lang}/cases`,
+      languages: {
+        'zh-CN': '/zh/cases',
+        'en-US': '/en/cases',
+      },
+    },
+    openGraph: {
+      type: 'website',
+      url: `/${lang}/cases`,
+      title,
+      description,
+      siteName: isZh ? '宠医通' : 'Pet Med-Pal',
+      locale: isZh ? 'zh_CN' : 'en_US',
+    },
+    twitter: { card: 'summary_large_image', title, description },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function CasesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

@@ -1,0 +1,125 @@
+{
+  "report_id": "PM-2026-0031",
+  "date": "2026-01-28",
+  "submitted": "Jan 28, 2026, 2:15 PM",
+  "completed": "Jan 29, 2026, 8:42 AM",
+  "diagnosis_plain": "Bilateral Hip Dysplasia — OFA Grade Moderate, with early secondary osteoarthritis",
+  "pet": {
+    "breed": "Labrador Retriever",
+    "sex": "Female (spayed)",
+    "age": "2 years",
+    "weight": "28 kg (62 lbs)",
+    "chief_complaint": "3-month hind limb lameness, worse on right side; difficulty with stairs; morning stiffness",
+    "clinic": "Orthopedic specialty veterinary hospital",
+    "report_type": "Ventrodorsal pelvic radiograph + orthopedist assessment",
+    "vet": "Board-certified orthopedic surgeon",
+    "history": "No prior joint complaints; lameness onset 3 months ago, gradually worsening"
+  },
+  "summary": {
+    "severity": "Significant concern — bilateral structural damage, surgical window now optimal",
+    "findings_count": "6 radiographic parameters reviewed",
+    "decision_window": "Urgent — 2-year-old is at peak surgical benefit window",
+    "prognosis": "Excellent with THR; good with FHO; progressive deterioration without surgery",
+    "paths": "4 paths: Conservative · TPO/DPO · THR · FHO",
+    "priority_match": "THR best matches active lifestyle; Conservative viable if budget is the constraint",
+    "next_step": "Consult orthopedic surgeon for THR candidacy evaluation; right hip priority"
+  },
+  "findings": [
+    {
+      "name": "Norberg Angle (Right Hip)",
+      "value": "91°",
+      "range": "≥105°",
+      "deviation": "↓ Moderate",
+      "meaning": "Significantly below normal — poor femoral head coverage, primary HD criterion"
+    },
+    {
+      "name": "Norberg Angle (Left Hip)",
+      "value": "98°",
+      "range": "≥105°",
+      "deviation": "↓ Mild",
+      "meaning": "Below normal — dysplasia confirmed bilaterally"
+    },
+    {
+      "name": "Femoral Head Morphology",
+      "value": "Mild deformity + early osteophytes",
+      "range": "Smooth, round",
+      "deviation": "↑ Mild",
+      "meaning": "Secondary osteoarthritis has already begun"
+    },
+    {
+      "name": "Acetabular Depth",
+      "value": "Shallow",
+      "range": "Full femoral head coverage",
+      "deviation": "↑ Moderate",
+      "meaning": "Inadequate coverage of femoral head — classic radiographic sign of HD"
+    },
+    {
+      "name": "OFA Grade (Overall)",
+      "value": "Moderate",
+      "range": "Normal / Borderline",
+      "deviation": "↑ Moderate",
+      "meaning": "Joint cartilage and structure already damaged; intervention warranted"
+    },
+    {
+      "name": "Joint Space (Right)",
+      "value": "Mildly narrowed",
+      "range": "Within normal limits",
+      "deviation": "↑ Mild",
+      "meaning": "Early cartilage wear detected"
+    }
+  ],
+  "paths": [
+    {
+      "label": "Option A",
+      "approach": "Conservative Management",
+      "survival": "Symptom control only; arthritis will inevitably progress",
+      "cost": "$80–200/month (NSAIDs + joint supplements + physiotherapy)",
+      "aligns": "Low upfront cost; no surgical risk; buys time while planning",
+      "tensions": "Does not correct underlying structure; surgery likely needed within 5–8 years with worse outcomes"
+    },
+    {
+      "label": "Option B",
+      "approach": "TPO / DPO (Pelvic Osteotomy)",
+      "survival": "Excellent outcomes when performed within age window — limited applicability here",
+      "cost": "$1,500–3,000 per hip",
+      "aligns": "Best for dogs under 18 months; less applicable at 2 years",
+      "tensions": "Skeletal maturity reduces benefit; secondary arthritis may limit results"
+    },
+    {
+      "label": "Option C",
+      "approach": "THR (Total Hip Replacement)",
+      "survival": ">90% achieve good to excellent outcomes; near-normal function at 5+ years",
+      "cost": "$4,000–8,000 per hip",
+      "aligns": "Best long-term prognosis for active 28 kg dog; implant lifespan covers most of dog's life",
+      "tensions": "Highest upfront cost; implant loosening / infection risk <3%; strict candidate screening required"
+    },
+    {
+      "label": "Option D",
+      "approach": "FHO (Femoral Head Ostectomy)",
+      "survival": "70–80% satisfactory in large breeds; limited mobility compared to THR",
+      "cost": "$1,000–2,500 per hip",
+      "aligns": "Budget-friendly surgical option; pain relief without implant",
+      "tensions": "Creates false joint; activity level and gait may be permanently reduced in large dogs"
+    }
+  ],
+  "prognosis_bullets": [
+    "THR: >90% of dogs achieve good to excellent outcomes; long-term function approaches normal dogs at 5+ years",
+    "FHO: ~70–80% of large-breed dogs achieve satisfactory results, though gait and intensity may be somewhat limited",
+    "Conservative management: effective symptom control, but arthritis inevitably progresses; surgery typically needed within 5–8 years",
+    "Untreated moderate HD: ~40% develop significantly worsened pain within 5 years, requiring more aggressive intervention"
+  ],
+  "prognosis_note": "At 2 years old, this dog is at the optimal surgical window — skeletal maturity is complete but arthritis has not yet advanced severely. Acting now maximizes surgical benefit. Delaying increases arthritis severity and reduces long-term outcomes.",
+  "questions": [
+    "Given the current arthritis level, is conservative management still viable as a bridge before surgery?",
+    "If we choose THR, how many procedures does your team perform annually? Which implant system do you use (BioMedtrix, Kyon, etc.)?",
+    "For bilateral HD, do you recommend treating both hips simultaneously or staged? Typical interval between procedures?",
+    "What pre-surgical workup is required (cardiac evaluation, bloodwork)? Any contraindications to screen for?",
+    "What does the post-THR rehabilitation protocol look like? Is hydrotherapy or physical therapy available?",
+    "If we start with conservative management, can long-term NSAID use accelerate cartilage damage?"
+  ],
+  "sources": [
+    "Lust G. An overview of the pathogenesis of canine hip dysplasia. J Am Vet Med Assoc. 1997",
+    "Olmstead ML. Total hip replacement in the dog. Semin Vet Med Surg. 1987",
+    "Off W, Matis U. Excision arthroplasty of the hip joint in dogs and cats. Vet Comp Orthop Traumatol. 2010"
+  ]
+}

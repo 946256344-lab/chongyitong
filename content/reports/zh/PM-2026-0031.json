@@ -1,0 +1,125 @@
+{
+  "report_id": "PM-2026-0031",
+  "date": "2026-01-28",
+  "submitted": "2026-01-28 14:15",
+  "completed": "2026-01-29 08:42",
+  "diagnosis_plain": "双侧髋关节发育不良（HD）— OFA 中度，伴早期继发性骨关节炎",
+  "pet": {
+    "breed": "拉布拉多寻回犬",
+    "sex": "雌性（已绝育）",
+    "age": "2岁",
+    "weight": "28 kg",
+    "chief_complaint": "后腿跛行3个月，右侧明显，上下楼困难，晨起僵硬",
+    "clinic": "骨科专科动物医院",
+    "report_type": "骨盆腹背位 X 光片 + 骨科医生初诊评估",
+    "vet": "骨科专科认证医生",
+    "history": "无关节病史；3个月前出现跛行，症状逐渐加重"
+  },
+  "summary": {
+    "severity": "较重关注——双侧结构性损伤，当前为最佳手术窗口期",
+    "findings_count": "共解读6项影像学指标",
+    "decision_window": "较紧迫——2岁是手术获益最大的窗口",
+    "prognosis": "THR 预后优秀；FHO 预后良好；不手术则病情持续进展",
+    "paths": "4条路径：保守治疗 · TPO/DPO · THR全髋置换 · FHO股骨头切除",
+    "priority_match": "THR最适合活动量大的犬只；保守治疗适合经费有限时过渡",
+    "next_step": "咨询骨科专科医生评估THR适应证；优先处理症状更重的右髋"
+  },
+  "findings": [
+    {
+      "name": "Norberg角（右髋）",
+      "value": "91°",
+      "range": "≥105°",
+      "deviation": "↓ 中度",
+      "meaning": "显著低于正常值——股骨头覆盖率差，HD首要诊断标准"
+    },
+    {
+      "name": "Norberg角（左髋）",
+      "value": "98°",
+      "range": "≥105°",
+      "deviation": "↓ 轻度",
+      "meaning": "低于正常值——双侧髋关节发育不良确认"
+    },
+    {
+      "name": "股骨头形态",
+      "value": "轻度变形，骨赘形成",
+      "range": "圆润光滑",
+      "deviation": "↑ 轻度",
+      "meaning": "继发性骨关节炎已开始进展"
+    },
+    {
+      "name": "髋臼深度",
+      "value": "浅，覆盖不足",
+      "range": "股骨头充分覆盖",
+      "deviation": "↑ 中度",
+      "meaning": "髋臼对股骨头覆盖不足——典型HD影像学特征"
+    },
+    {
+      "name": "OFA评级（综合）",
+      "value": "中度（Moderate）",
+      "range": "正常 / 临界",
+      "deviation": "↑ 中度",
+      "meaning": "关节软骨和结构已有损伤，需要干预"
+    },
+    {
+      "name": "关节间隙（右侧）",
+      "value": "轻度变窄",
+      "range": "正常范围",
+      "deviation": "↑ 轻度",
+      "meaning": "早期软骨磨损迹象"
+    }
+  ],
+  "paths": [
+    {
+      "label": "方案A",
+      "approach": "保守治疗",
+      "survival": "仅控制症状，关节炎必然持续进展",
+      "cost": "约¥500–1500/月（止痛药+关节补充剂+理疗）",
+      "aligns": "前期费用低；无手术风险；可作为手术前的过渡",
+      "tensions": "无法纠正根本结构问题；5–8年内通常仍需手术且效果更差"
+    },
+    {
+      "label": "方案B",
+      "approach": "TPO/DPO 截骨术",
+      "survival": "适用年龄窗口内效果良好——本例适用性有限",
+      "cost": "约¥8000–15000/侧",
+      "aligns": "最适合18个月以下骨骼未闭合的犬只",
+      "tensions": "骨骼已定型，本例年龄偏大；继发性关节炎可能影响效果"
+    },
+    {
+      "label": "方案C",
+      "approach": "THR 全髋关节置换",
+      "survival": ">90%达到良好至优秀效果；5年以上功能接近正常犬",
+      "cost": "约¥20000–40000/侧",
+      "aligns": "28kg活动量大的犬最佳选择；假体寿命可覆盖大部分狗狗生命周期",
+      "tensions": "前期费用最高；假体松动/感染风险<3%；需严格筛查适应证"
+    },
+    {
+      "label": "方案D",
+      "approach": "FHO 股骨头切除术",
+      "survival": "大型犬70–80%获得满意结果，但活动度不及THR",
+      "cost": "约¥5000–10000/侧",
+      "aligns": "经费有限时的手术选项；无假体；有效缓解疼痛",
+      "tensions": "形成假关节，大型犬活动强度和步态可能长期受限"
+    }
+  ],
+  "prognosis_bullets": [
+    "THR全髋置换：>90%犬只恢复良好至优秀，5年以上长期活动功能接近正常犬",
+    "FHO股骨头切除：约70–80%大型犬获得满意结果，但步态和活动强度可能有所受限",
+    "保守治疗：有效缓解症状，但关节炎必然进展；5–8年内通常需要手术干预",
+    "未经治疗的中度HD：约40%会在5年内出现显著疼痛加重，需要更激进的手术干预"
+  ],
+  "prognosis_note": "2岁是最佳手术窗口——骨骼基本定型，但关节炎尚未严重进展。现在干预可最大化手术获益。拖延只会加重关节炎损伤，使手术效果打折。",
+  "questions": [
+    "目前的关节炎进展程度，是否还适合保守治疗过渡一段时间再手术？",
+    "如果选择THR，贵院每年手术量是多少？使用哪个品牌的假体（BioMedtrix、Kyon等）？",
+    "双侧HD是建议同期手术还是分期？两次手术之间一般间隔多久？",
+    "术前需要做哪些检查（心肺评估、血常规等）？有哪些禁忌证需要排查？",
+    "THR术后康复方案是什么？是否有水疗或物理治疗配合？",
+    "如果先选保守治疗，长期服用止痛药会不会加速关节软骨损伤？"
+  ],
+  "sources": [
+    "Lust G. An overview of the pathogenesis of canine hip dysplasia. J Am Vet Med Assoc. 1997",
+    "Olmstead ML. Total hip replacement in the dog. Semin Vet Med Surg. 1987",
+    "Off W, Matis U. Excision arthroplasty of the hip joint in dogs and cats. Vet Comp Orthop Traumatol. 2010"
+  ]
+}

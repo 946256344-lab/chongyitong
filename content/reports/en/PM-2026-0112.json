@@ -1,0 +1,135 @@
+{
+  "report_id": "PM-2026-0112",
+  "date": "2026-03-01",
+  "submitted": "Mar 1, 2026, 3:27 PM",
+  "completed": "Mar 2, 2026, 9:15 AM",
+  "diagnosis_plain": "Feline CKD IRIS Stage 2–3, mild systemic hypertension, borderline proteinuria",
+  "pet": {
+    "breed": "Domestic Shorthair",
+    "sex": "Male (neutered)",
+    "age": "14 years",
+    "weight": "4.2 kg (9.3 lbs)",
+    "chief_complaint": "Progressive weight loss over 12 months; increased water intake; abnormal kidney values on routine annual bloodwork",
+    "clinic": "General practice veterinary clinic",
+    "report_type": "Serum biochemistry panel, CBC, SDMA, blood pressure, urinalysis + UPC ratio",
+    "vet": "General practice veterinarian",
+    "history": "No prior known illness; gradual weight loss over 12 months; increased water intake noted in past 1–2 months"
+  },
+  "summary": {
+    "severity": "Significant — IRIS Stage 2–3 CKD with three progression accelerators: elevated phosphorus, hypertension, borderline proteinuria",
+    "findings_count": "6 key parameters reviewed (creatinine, BUN, SDMA, phosphorus, blood pressure, UPC)",
+    "decision_window": "Intervene now — Whiskey is currently compensated; acting before decompensation gives the best quality-of-life outcomes",
+    "prognosis": "Good with active management; IRIS Stage 2 median survival ~3–4 years; phosphorus control and BP management are the highest-impact interventions",
+    "paths": "5 interventions ranked by priority: renal diet · phosphate binder · amlodipine · subQ fluids · telmisartan",
+    "priority_match": "Staged approach — renal diet + amlodipine now; reassess phosphate binder and subQ fluids at 4–6 week recheck",
+    "next_step": "Start renal wet food transition and amlodipine immediately; recheck BP + BMP + UPC in 4–6 weeks"
+  },
+  "findings": [
+    {
+      "name": "Creatinine",
+      "value": "2.8 mg/dL",
+      "range": "0.6–2.4 mg/dL",
+      "deviation": "↑ Moderate",
+      "meaning": "Above normal — confirms reduced glomerular filtration rate; places Whiskey at IRIS Stage 2–3 boundary"
+    },
+    {
+      "name": "BUN (Blood Urea Nitrogen)",
+      "value": "45 mg/dL",
+      "range": "10–30 mg/dL",
+      "deviation": "↑ Moderate",
+      "meaning": "Elevated — reduced clearance of protein metabolic waste; supports CKD diagnosis alongside creatinine"
+    },
+    {
+      "name": "SDMA",
+      "value": "25 μg/dL",
+      "range": "<18 μg/dL",
+      "deviation": "↑ Moderate",
+      "meaning": "Early-sensitive kidney biomarker — elevation reflects ~40–50% nephron loss; confirms CKD even when creatinine is borderline"
+    },
+    {
+      "name": "Phosphorus",
+      "value": "6.2 mg/dL",
+      "range": "2.5–6.0 mg/dL",
+      "deviation": "↑ Mild",
+      "meaning": "Borderline elevated — phosphorus retention in CKD directly accelerates nephron loss; dietary management is high priority"
+    },
+    {
+      "name": "Blood Pressure",
+      "value": "168 mmHg",
+      "range": "Target <160 mmHg",
+      "deviation": "↑ Mild",
+      "meaning": "Mildly hypertensive — damages remaining nephrons and significantly increases risk of retinal detachment (acute blindness)"
+    },
+    {
+      "name": "UPC (Urine Protein:Creatinine Ratio)",
+      "value": "0.3",
+      "range": "<0.2 (normal in cats)",
+      "deviation": "↑ Mild",
+      "meaning": "Borderline proteinuric — persistent protein loss through damaged filtration membranes accelerates tubular injury and CKD progression"
+    }
+  ],
+  "paths": [
+    {
+      "label": "Option A",
+      "approach": "Prescription Renal Diet (Phosphorus-Restricted, Controlled Protein)",
+      "survival": "Strong evidence: extends median survival 2–3× in IRIS Stage 2–3 compared to regular food; single highest-impact intervention",
+      "cost": "$50–120/month (prescription wet food preferred)",
+      "aligns": "Non-invasive; wet food simultaneously provides hydration; phosphorus restriction addresses two problems at once; immediately actionable",
+      "tensions": "Some cats resist new foods — transition must be gradual (2–4 weeks); switching too fast risks food aversion; protein restriction must be balanced to avoid muscle wasting"
+    },
+    {
+      "label": "Option B",
+      "approach": "Phosphate Binder (e.g., Epakitin, aluminum hydroxide)",
+      "survival": "Strong when serum phosphorus remains >4.5 mg/dL after diet transition; directly reduces phosphorus-driven nephron loss",
+      "cost": "$20–50/month",
+      "aligns": "Powder or liquid mixed with food; minimal handling stress; essential if phosphorus does not normalize on renal diet alone",
+      "tensions": "Not necessary if renal diet alone normalizes phosphorus — reassess at 4–6 week recheck before starting; different binders suit different cats"
+    },
+    {
+      "label": "Option C",
+      "approach": "Amlodipine (Antihypertensive)",
+      "survival": "Strong evidence: first-line antihypertensive in cats; essential at BP >160 mmHg; prevents retinal detachment, stroke, and nephron loss",
+      "cost": "$15–30/month",
+      "aligns": "Small daily dose (compounded liquid or 1/8 tablet); low-stress administration; rapid BP reduction typically seen within 1–2 weeks",
+      "tensions": "Initial BP recheck in 7–10 days needed to confirm dose adequacy; some cats need dose adjustment; white-coat hypertension possible — consider baseline home BP monitoring"
+    },
+    {
+      "label": "Option D",
+      "approach": "Subcutaneous Fluid Administration (Home SQ Fluids)",
+      "survival": "Moderate evidence: improves well-being and reduces azotemia in dehydrated cats; most beneficial at IRIS Stage 3+",
+      "cost": "$30–80/month (fluids + administration sets)",
+      "aligns": "Corrects subclinical dehydration that kidneys can no longer compensate; many owners successfully learn the technique; can be done every 2–3 days",
+      "tensions": "Requires in-clinic training; some cats resist restraint; at Stage 2 with good hydration, not yet urgent — revisit at next recheck"
+    },
+    {
+      "label": "Option E",
+      "approach": "Telmisartan (ARB) or Benazepril (ACE Inhibitor)",
+      "survival": "Moderate: telmisartan reduces UPC in cats; benazepril has less feline-specific evidence; most beneficial when UPC ≥0.4",
+      "cost": "$25–60/month",
+      "aligns": "Targets proteinuria directly; secondary nephroprotective effect; can be compounded into palatable liquid form",
+      "tensions": "At UPC 0.3, intervention threshold is borderline — recheck UPC in 4–6 weeks; if rising, strong indication to start; avoid ACE inhibitors if severely dehydrated"
+    }
+  ],
+  "prognosis_bullets": [
+    "IRIS Stage 2 CKD with active management: median survival approximately 1,150–1,500 days (~3–4 years) from diagnosis",
+    "IRIS Stage 3 CKD with active management: median survival ~250–350 days from diagnosis; outcomes vary greatly based on BP and phosphorus control",
+    "Renal diet is the single strongest prognostic intervention: phosphorus restriction reduces progression by 2–3× compared to regular food",
+    "Uncontrolled hypertension (BP >180 mmHg): significantly increases risk of acute onset blindness from retinal detachment — a preventable emergency",
+    "Proteinuria monitoring is critical: UPC >0.4 is associated with ~3× faster CKD progression rate; track at every recheck"
+  ],
+  "prognosis_note": "Whiskey's current status is encouraging for a 14-year-old cat with CKD — he is compensated, eating, and interactive. The goal is not to cure CKD but to slow it substantially. With a renal diet, blood pressure control, and phosphorus management, cats at his stage commonly maintain excellent quality of life for 2–3+ years. A staged, measured approach is both medically sound and less stressful for him.",
+  "questions": [
+    "Based on the full panel, are we at IRIS Stage 2 or Stage 3? This determines whether subcutaneous fluids are a priority now or can wait.",
+    "Should we recheck blood pressure at a calm, low-stress visit before starting amlodipine, or is 168 mmHg reliably above the treatment threshold?",
+    "Which renal diet do you recommend — wet food (preferred for hydration) or dry? Can I transition Whiskey gradually by mixing with his current food?",
+    "If phosphorus is still above 4.5 mg/dL after 4–6 weeks on the renal diet, which phosphate binder do you recommend and how is it administered?",
+    "Whiskey's UPC is 0.3 — at what level would you recommend starting telmisartan, and when should we recheck the UPC?",
+    "Should Whiskey have a fundic eye exam now to check for early hypertensive retinopathy, given his blood pressure?",
+    "What signs should prompt an urgent vet visit versus monitoring at home — is it vomiting, complete appetite loss, sudden hiding, or something else?"
+  ],
+  "sources": [
+    "IRIS (International Renal Interest Society) CKD staging and treatment guidelines, 2023. Available at: www.iris-kidney.com",
+    "Syme HM, et al. Prevalence of systolic hypertension in cats with chronic renal failure at initial evaluation. J Am Vet Med Assoc. 2002;220(12):1799-1804",
+    "Brown SA, et al. Effects of dietary polyunsaturated fatty acid supplementation in early renal insufficiency in dogs. J Lab Clin Med. 1998;131(5):447-455"
+  ]
+}

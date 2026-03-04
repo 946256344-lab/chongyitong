@@ -2,8 +2,47 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { getDictionary } from '../../dictionaries';
 import { Calendar, ChevronRight } from 'lucide-react';
+
+const BASE_URL = 'https://severepetcondition.site';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const isZh = lang === 'zh';
+  const title = isZh ? '宠主社区 | 宠医通' : 'Community | Pet Med-Pal';
+  const description = isZh
+    ? '宠主经验分享，记录与慢性病、手术、老龄宠物同行的真实故事，互相支持与启发。'
+    : 'Pet owner stories — honest experiences living with chronic illness, surgeries, and aging pets. Support and inspiration from the community.';
+
+  return {
+    metadataBase: new URL(BASE_URL),
+    title,
+    description,
+    alternates: {
+      canonical: `/${lang}/community`,
+      languages: {
+        'zh-CN': '/zh/community',
+        'en-US': '/en/community',
+      },
+    },
+    openGraph: {
+      type: 'website',
+      url: `/${lang}/community`,
+      title,
+      description,
+      siteName: isZh ? '宠医通' : 'Pet Med-Pal',
+      locale: isZh ? 'zh_CN' : 'en_US',
+    },
+    twitter: { card: 'summary_large_image', title, description },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function CommunityPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

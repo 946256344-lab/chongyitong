@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getDictionary } from "../dictionaries";
+import HtmlLangUpdater from "@/components/HtmlLangUpdater";
 
 export default async function LangLayout({
   children,
@@ -15,6 +16,7 @@ export default async function LangLayout({
 
   return (
     <>
+      <HtmlLangUpdater lang={lang} />
       <Navbar lang={lang} dict={dict} />
       <main className="flex-grow">
         {children}
