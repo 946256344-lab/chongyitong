@@ -16,11 +16,12 @@
   "slogan": "宠医通｜决策助手",
   "subSlogan": "看懂宠物医疗报告，理性评估治疗选择，安心与兽医沟通。",
   "emailPlaceholder": "您的联系邮箱（用于接收结果）",
+  "formLabel": "病情描述",
   "descPlaceholder": "如：猫咪确诊肥厚性心肌病，目前有喘鸣，医生建议药物控制...",
   "uploadBtn": "上传图片",
   "uploaded": "图片已上传",
   "uploading": "上传中...",
-  "submitBtn": "提交需求",
+  "submitBtn": "生成报告",
   "historyBtn": "使用说明",
   "title": "提交成功！",
   "backBtn": "返回再次提交",
@@ -31,7 +32,7 @@
     "uploadBtn": "上传图片",
     "uploaded": "图片已上传",
     "uploading": "上传中...",
-    "desc": "我们已收到您的需求。专家会在 24 小时内处理完毕，并发送结果至您的邮箱：",
+    "desc": "报告已收到！请选择获取报告的方式：",
     "backBtn": "返回再次提交"
   },
   "textarea ": {
@@ -66,6 +67,20 @@
   "casesTeaser": {
     "title": "看看真实报告是什么样的",
     "link": "查看全部案例 →"
+  },
+  "reportGen": {
+    "optionATitle": "快速生成基础报告",
+    "optionADesc": "基于您提交的信息立即生成，免费",
+    "optionABtn": "立即生成",
+    "optionBTitle": "生成完整版报告",
+    "optionBDesc": "再回答几个问题，获得更详尽的个性化分析",
+    "optionBBtn": "填写详情",
+    "generating": "正在为您生成报告，请稍候……",
+    "generatingSub": "通常需要 30 秒左右",
+    "error": "生成失败，请重试",
+    "restart": "重新提交",
+    "upgradeHint": "当前为基础版报告，包含诊断概述、宠物档案及检查数据。补充更多信息，获取完整版——含治疗路径对比、预后分析及兽医问题清单。",
+    "upgradeBtn": "补充信息，获取完整报告"
   },
   "guide": {
     "title": "使用指南",
@@ -138,8 +153,9 @@
     "visit4": "交通或时间有较大困难",
     "next": "下一步",
     "back": "上一步",
-    "submit": "提交补充信息",
+    "submit": "获取报告",
     "submitting": "提交中...",
+    "uploadImages": "上传医疗图片（可选）",
     "doneTitle": "完整信息已收到！",
     "doneDesc": "我们会结合您的补充信息，为您准备最精准的报告，并发送至"
   }

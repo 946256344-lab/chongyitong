@@ -14,11 +14,12 @@
   "slogan": "PetMed Navigator | Decision Assistant",
   "subSlogan": "Understand veterinary medical reports, evaluate treatment options rationally, and communicate with your vet with confidence",
   "emailPlaceholder": "Your email address (used to receive the report)",
+  "formLabel": "Patient Description",
   "descPlaceholder": "e.g. Cat diagnosed with HCM, occasional labored breathing, vet recommends medication...",
   "uploadBtn": "Upload Image",
   "uploaded": "Image uploaded",
   "uploading": "Uploading...",
-  "submitBtn": "Submit Request",
+  "submitBtn": "Generate Report",
   "historyBtn": "User Guide",
   "title": "Submission Successful!",
   "backBtn": "Back and Submit Again",
@@ -29,7 +30,7 @@
     "uploadBtn": "Upload Image",
     "uploaded": "Image uploaded",
     "uploading": "Uploading...",
-    "desc": "We have received your request. Our specialists will complete the review within 24 hours and send the results to your email:",
+    "desc": "We've received your report. How would you like to get your decision guide?",
     "backBtn": "Back and Submit Again"
   },
   "textarea ": {
@@ -64,6 +65,20 @@
   "casesTeaser": {
     "title": "See what a real report looks like",
     "link": "View all case reports →"
+  },
+  "reportGen": {
+    "optionATitle": "Quick Report",
+    "optionADesc": "Generate instantly with your submitted info — free",
+    "optionABtn": "Generate now",
+    "optionBTitle": "Full Report",
+    "optionBDesc": "Answer a few more questions for a comprehensive, personalized analysis",
+    "optionBBtn": "Add details",
+    "generating": "Generating your report, please wait…",
+    "generatingSub": "This usually takes around 30 seconds",
+    "error": "Generation failed, please try again",
+    "restart": "Submit another report",
+    "upgradeHint": "This quick report covers the summary, pet profile, and medical findings. Add details to unlock treatment path comparison, prognosis, and a vet questions checklist.",
+    "upgradeBtn": "Add details for full report"
   },
   "guide": {
     "title": "How It Works",
@@ -135,8 +150,9 @@
     "visit4": "Travel or schedule is a real constraint",
     "next": "Next",
     "back": "Back",
-    "submit": "Submit Details",
+    "submit": "Get My Report",
     "submitting": "Submitting...",
+    "uploadImages": "Upload medical images (optional)",
     "doneTitle": "All set — thank you!",
     "doneDesc": "We'll use your details to prepare the most accurate report possible and send it to"
   }

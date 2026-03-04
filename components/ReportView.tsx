@@ -407,17 +407,21 @@ function Disclaimer({ data, lang }: { data: ReportData; lang: string }) {
 
 /* ─── Main export ────────────────────────────────────────── */
 
-export default function ReportView({ data, lang }: { data: ReportData; lang: string }) {
+export default function ReportView({ data, lang, mode = 'full' }: { data: ReportData; lang: string; mode?: 'quick' | 'full' }) {
   return (
     <div className="font-sans">
       <ReportHeader data={data} />
       <SummaryCard data={data} lang={lang} />
       <PetProfile data={data} lang={lang} />
       <MedicalFindings data={data} lang={lang} />
-      <TreatmentPaths data={data} lang={lang} />
-      <Prognosis data={data} lang={lang} />
-      <VetQuestions data={data} lang={lang} />
-      <Disclaimer data={data} lang={lang} />
+      {mode === 'full' && (
+        <>
+          <TreatmentPaths data={data} lang={lang} />
+          <Prognosis data={data} lang={lang} />
+          <VetQuestions data={data} lang={lang} />
+          <Disclaimer data={data} lang={lang} />
+        </>
+      )}
     </div>
   );
 }

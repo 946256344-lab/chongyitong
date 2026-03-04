@@ -5,15 +5,16 @@ import { supabase } from '@/lib/supabase';
 import React from 'react';
 import {
   Image as ImageIcon, Send, CheckCircle, HelpCircle, X,
-  ChevronRight, ChevronLeft, Twitter, Github, Disc,
+  ChevronRight, ChevronLeft, Twitter, Github, Disc, Loader2, Zap, ClipboardList,
 } from 'lucide-react';
 import { Dictionary } from '@/app/dictionaries';
 import Link from 'next/link';
 import GuideModal from './GuideModal';
 import type { FeaturedCase } from '@/app/[lang]/page';
+import ReportView, { type ReportData } from './ReportView';
 
 // ── 阶段状态 ─────────────────────────────────────────────
-type Phase = 'form' | 'success' | 'intake' | 'done';
+type Phase = 'form' | 'success' | 'generating' | 'report' | 'intake' | 'done';
 
 interface IntakeData {
   species: string;
@@ -70,27 +71,78 @@ function StepDots({ current, total }: { current: number; total: number }) {
   );
 }
 
+// ── 通用多图上传按钮 ──────────────────────────────────────
+function UploadButton({
+  inputRef, uploading, urls, label, labelUploading, labelDone, onChange,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  uploading: boolean;
+  urls: string[];
+  label: string;
+  labelUploading: string;
+  labelDone: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const hasFiles = urls.length > 0;
+  return (
+    <>
+      <input
+        type="file"
+        ref={inputRef}
+        onChange={onChange}
+        className="hidden"
+        accept="image/*"
+        multiple
+      />
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition border ${
+          hasFiles
+            ? 'text-blue-600 border-blue-200 bg-blue-50'
+            : 'text-gray-500 bg-gray-50 hover:bg-gray-100 border-gray-100'
+        }`}
+      >
+        <ImageIcon size={14} />
+        <span>
+          {uploading
+            ? labelUploading
+            : hasFiles
+              ? `${urls.length} ${labelDone}`
+              : label}
+        </span>
+      </button>
+    </>
+  );
+}
+
 // ── 主组件 ───────────────────────────────────────────────
 export default function MainForm({ dict, lang, featuredCases }: { dict: Dictionary; lang: string; featuredCases: FeaturedCase[] }) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef      = useRef<HTMLInputElement>(null);
+  const intakeFileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Phase 1 states
-  const [uploading, setUploading]     = useState(false);
-  const [imageUrl, setImageUrl]       = useState<string | null>(null);
-  const [description, setDescription] = useState('');
+  const [uploading, setUploading]       = useState(false);
+  const [imageUrls, setImageUrls]       = useState<string[]>([]);
+  const [description, setDescription]   = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail]             = useState('');
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen]   = useState(false);
 
   // Phase management
   const [phase, setPhase]               = useState<Phase>('form');
   const [submissionId, setSubmissionId] = useState<string | null>(null);
-  const [savedEmail, setSavedEmail]     = useState('');
+  const [savedDescription, setSavedDescription] = useState('');
+  const [reportData, setReportData]     = useState<ReportData | null>(null);
+  const [generateError, setGenerateError] = useState(false);
+  const [isQuickReport, setIsQuickReport] = useState(false);
 
   // Intake state
-  const [intakeStep, setIntakeStep]         = useState(0);
+  const [intakeStep, setIntakeStep]               = useState(0);
   const [isIntakeSubmitting, setIsIntakeSubmitting] = useState(false);
+  const [intakeUploading, setIntakeUploading]     = useState(false);
+  const [intakeImageUrls, setIntakeImageUrls]     = useState<string[]>([]);
   const [intake, setIntake] = useState<IntakeData>({
     species: '', breed: '', age: '', weight: '', sex: '',
     diagnosis: '', treatmentOptions: '',
@@ -100,20 +152,26 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   const setField = (field: keyof IntakeData, value: string) =>
     setIntake((prev) => ({ ...prev, [field]: value }));
 
-  // ── 文件上传 ────────────────────────────────────────────
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setUploading(true);
-      const file = event.target.files?.[0];
-      if (!file) return;
+  // ── 通用多图上传函数 ────────────────────────────────────
+  const uploadFiles = async (files: File[]): Promise<string[]> => {
+    return Promise.all(files.map(async (file) => {
       const fileExt = file.name.split('.').pop();
       const filePath = `${Math.random()}.${fileExt}`;
-      const { error: uploadError } = await supabase.storage
-        .from('user-images')
-        .upload(filePath, file);
-      if (uploadError) throw uploadError;
+      const { error } = await supabase.storage.from('user-images').upload(filePath, file);
+      if (error) throw error;
       const { data } = supabase.storage.from('user-images').getPublicUrl(filePath);
-      setImageUrl(data.publicUrl);
+      return data.publicUrl;
+    }));
+  };
+
+  // ── 主表单文件上传 ──────────────────────────────────────
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    if (!files.length) return;
+    setUploading(true);
+    try {
+      const urls = await uploadFiles(files);
+      setImageUrls((prev) => [...prev, ...urls]);
     } catch (error) {
       alert(dict.uploaderror);
       console.error(error);
@@ -122,9 +180,25 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
     }
   };
 
+  // ── 补充信息文件上传 ────────────────────────────────────
+  const handleIntakeFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []);
+    if (!files.length) return;
+    setIntakeUploading(true);
+    try {
+      const urls = await uploadFiles(files);
+      setIntakeImageUrls((prev) => [...prev, ...urls]);
+    } catch (error) {
+      alert(dict.uploaderror);
+      console.error(error);
+    } finally {
+      setIntakeUploading(false);
+    }
+  };
+
   // ── 第一步提交 ──────────────────────────────────────────
   const handleSubmit = async () => {
-    if (!imageUrl || !description || !email) {
+    if (!description) {
       alert(dict.uploaderror);
       return;
     }
@@ -132,23 +206,22 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
     try {
       const { data: insertData, error } = await supabase
         .from('submissions')
-        .insert([{ description, image_url: imageUrl, status: 'pending', user_email: email }])
+        .insert([{ description, image_url: imageUrls[0] ?? null, status: 'pending' }])
         .select('id')
         .single();
 
       if (error) throw error;
 
       setSubmissionId(insertData?.id ?? null);
-      setSavedEmail(email);
+      setSavedDescription(description);
 
       fetch('/api/notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, description, imageUrl }),
+        body: JSON.stringify({ email: '', description, imageUrl: imageUrls[0] ?? '' }),
       }).catch((err) => console.error('通知发送失败', err));
 
-      setImageUrl(null);
-      setEmail('');
+      setImageUrls([]);
       setDescription('');
       setPhase('success');
     } catch (error) {
@@ -159,9 +232,34 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
     }
   };
 
-  // ── 补充信息提交 ────────────────────────────────────────
+  // ── 快速生成报告（仅基础信息）────────────────────────────
+  const handleQuickGenerate = async () => {
+    setGenerateError(false);
+    setIsQuickReport(true);
+    setPhase('generating');
+    try {
+      const res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: savedDescription, intake: null, lang }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.report) throw new Error(`${json.error ?? 'failed'} | ${json.detail ?? ''}`);
+      setReportData(json.report);
+      setPhase('report');
+    } catch (err) {
+      console.error(err);
+      setGenerateError(true);
+      setIsQuickReport(false);
+      setPhase('success');
+    }
+  };
+
+  // ── 补充信息提交 → 生成完整报告 ──────────────────────────
   const handleIntakeSubmit = async () => {
     setIsIntakeSubmitting(true);
+    setGenerateError(false);
+    setIsQuickReport(false);
     try {
       if (submissionId) {
         await supabase
@@ -173,14 +271,28 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: savedEmail,
+          email: '',
           description: `[补充信息]\n物种:${intake.species} 品种:${intake.breed} 年龄:${intake.age}岁 体重:${intake.weight}\n性别:${intake.sex}\n诊断:${intake.diagnosis}\n治疗选项:${intake.treatmentOptions}\n最在意:${intake.priority}\n预算:${intake.budget}\n复诊接受度:${intake.visitFreq}`,
-          imageUrl: '',
+          imageUrl: intakeImageUrls[0] ?? '',
         }),
       }).catch(() => {});
-      setPhase('done');
+
+      setIsIntakeSubmitting(false);
+      setPhase('generating');
+
+      const res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: savedDescription, intake, lang }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.report) throw new Error(`${json.error ?? 'failed'} | ${json.detail ?? ''}`);
+      setReportData(json.report);
+      setPhase('report');
     } catch (error) {
       console.error(error);
+      setGenerateError(true);
+      setPhase('success');
     } finally {
       setIsIntakeSubmitting(false);
     }
@@ -195,6 +307,7 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   };
 
   const d = dict.intake;
+  const uploadedLabel = lang === 'zh' ? '张已上传' : 'uploaded';
 
   // ── 渲染 ────────────────────────────────────────────────
   return (
@@ -279,8 +392,52 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         </div>
       </section>
 
-      {/* ══ Screen 3: Form ══════════════════════════════════ */}
+      {/* ══ Screen 3: Form / Report ═════════════════════════ */}
       <section id="form" className="min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-gradient-to-b from-[#fdf8f3] to-white">
+
+        {/* ── report 阶段：全宽展示 ReportView ── */}
+        {phase === 'report' && reportData && (
+          <div className="w-full max-w-4xl mx-auto">
+            <ReportView data={reportData} lang={lang} mode={isQuickReport ? 'quick' : 'full'} />
+
+            {/* 快速报告升级提示 */}
+            {isQuickReport && (
+              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl text-center">
+                <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                  {dict.reportGen.upgradeHint}
+                </p>
+                <button
+                  onClick={() => { setIntakeStep(0); setPhase('intake'); }}
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition shadow-sm shadow-blue-200"
+                >
+                  <ClipboardList size={16} />
+                  {dict.reportGen.upgradeBtn}
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => {
+                  setPhase('form');
+                  setReportData(null);
+                  setIsQuickReport(false);
+                  setImageUrls([]);
+                  setIntakeImageUrls([]);
+                  setIntake({ species:'',breed:'',age:'',weight:'',sex:'',diagnosis:'',treatmentOptions:'',priority:'',budget:'',visitFreq:'' });
+                  setIntakeStep(0);
+                }}
+                className="text-sm text-gray-400 hover:text-gray-600 transition underline"
+              >
+                {dict.reportGen.restart}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── 其他阶段：表单卡片 ── */}
+        {phase !== 'report' && (
         <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
 
           {/* Logo */}
@@ -296,49 +453,48 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
           {/* 卡片区域 */}
           <div className="w-full relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-300 to-purple-300 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur" />
-            <div className="relative bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-col gap-3 min-h-[160px] justify-center">
+            <div className="relative bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col gap-0 min-h-[160px]">
 
               {/* ── Phase: form ── */}
               {phase === 'form' && (
                 <>
-                  <input
-                    type="email"
-                    placeholder={dict.emailPlaceholder}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full outline-none text-sm text-gray-700 p-2 border-b border-gray-100 placeholder-gray-400 bg-transparent focus:border-blue-200 transition"
-                  />
+                  {/* 表单标题行 */}
+                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-gray-50/60">
+                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">{dict.formLabel}</span>
+                    <span className="text-[10px] text-gray-300 font-mono">Rx</span>
+                  </div>
+
                   <textarea
                     placeholder={dict.descPlaceholder}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full resize-none outline-none text-gray-700 p-2 min-h-[60px] bg-transparent"
+                    className="w-full resize-none outline-none text-gray-700 px-4 bg-transparent leading-7 placeholder-gray-300"
+                    style={{
+                      minHeight: '196px',
+                      paddingTop: '14px',
+                      backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #e9ecef 27px, #e9ecef 28px)',
+                      backgroundSize: '100% 28px',
+                      backgroundPositionY: '14px',
+                    }}
                   />
-                  <div className="flex items-center justify-between pt-2 px-1">
-                    <div className="flex items-center gap-2">
-                      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
-                      <button
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={uploading}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition border ${
-                          imageUrl
-                            ? 'text-blue-600 border-blue-200 bg-blue-50'
-                            : description || email
-                              ? 'text-amber-600 border-amber-300 bg-amber-50 animate-pulse'
-                              : 'text-gray-500 bg-gray-50 hover:bg-gray-100 border-gray-100'
-                        }`}
-                      >
-                        <ImageIcon size={14} />
-                        <span>{uploading ? dict.uploading : imageUrl ? dict.uploaded : dict.uploadBtn}</span>
-                        {!imageUrl && (description || email) && <span className="ml-0.5 text-amber-500">*</span>}
-                      </button>
-                    </div>
+                  {/* 上传 + 提交行 */}
+                  <div className="flex items-center gap-3 px-4 pb-4 pt-1">
+                    <UploadButton
+                      inputRef={fileInputRef}
+                      uploading={uploading}
+                      urls={imageUrls}
+                      label={dict.uploadBtn}
+                      labelUploading={dict.uploading}
+                      labelDone={uploadedLabel}
+                      onChange={handleFileChange}
+                    />
                     <button
                       onClick={handleSubmit}
-                      disabled={isSubmitting || !imageUrl || !description || !email}
-                      className="bg-gray-900 hover:bg-black text-white p-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={isSubmitting || !description}
+                      className="flex-1 flex items-center justify-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Send size={16} />
+                      <Send size={15} />
+                      {isSubmitting ? '...' : dict.submitBtn}
                     </button>
                   </div>
                 </>
@@ -346,38 +502,66 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
 
               {/* ── Phase: success ── */}
               {phase === 'success' && (
-                <div className="flex flex-col items-center text-center py-4 animate-in fade-in zoom-in duration-300">
+                <div className="flex flex-col items-center text-center p-4 animate-in fade-in zoom-in duration-300">
                   <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-3">
                     <CheckCircle size={24} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-800 mb-1">{dict.success.title}</h3>
                   <p className="text-sm text-gray-500 max-w-sm mb-6">
-                    {dict.success.desc}<br />
-                    <span className="font-medium text-blue-600">{savedEmail}</span>
+                    {dict.success.desc}
                   </p>
 
-                  <div className="w-full max-w-sm bg-blue-50 rounded-xl p-4 text-left mb-4">
-                    <p className="text-sm text-blue-800 font-medium mb-1">💡 {d.hint}</p>
-                  </div>
+                  {generateError && (
+                    <p className="text-xs text-red-500 mb-4">{dict.reportGen.error}</p>
+                  )}
 
-                  <button
-                    onClick={() => { setIntakeStep(0); setPhase('intake'); }}
-                    className="w-full max-w-sm bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition shadow-lg shadow-blue-100 flex items-center justify-center gap-2"
-                  >
-                    {d.start} <ChevronRight size={16} />
-                  </button>
-                  <button
-                    onClick={() => setPhase('form')}
-                    className="mt-3 text-xs text-gray-400 hover:text-gray-600 transition"
-                  >
-                    {d.skip}
-                  </button>
+                  {/* 两个选项卡 */}
+                  <div className="w-full flex flex-col gap-3">
+                    {/* Option A：快速报告 */}
+                    <button
+                      onClick={handleQuickGenerate}
+                      className="w-full flex items-start gap-4 p-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-left transition-all group"
+                    >
+                      <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm shadow-blue-200">
+                        <Zap size={18} className="text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-slate-800 mb-0.5">{dict.reportGen.optionATitle}</p>
+                        <p className="text-xs text-gray-500">{dict.reportGen.optionADesc}</p>
+                      </div>
+                      <ChevronRight size={16} className="text-blue-400 group-hover:translate-x-0.5 transition-transform mt-2 flex-shrink-0" />
+                    </button>
+
+                    {/* Option B：完整报告 */}
+                    <button
+                      onClick={() => { setIntakeStep(0); setPhase('intake'); }}
+                      className="w-full flex items-start gap-4 p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl text-left transition-all group"
+                    >
+                      <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <ClipboardList size={18} className="text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-slate-800 mb-0.5">{dict.reportGen.optionBTitle}</p>
+                        <p className="text-xs text-gray-500">{dict.reportGen.optionBDesc}</p>
+                      </div>
+                      <ChevronRight size={16} className="text-gray-400 group-hover:translate-x-0.5 transition-transform mt-2 flex-shrink-0" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ── Phase: generating ── */}
+              {phase === 'generating' && (
+                <div className="flex flex-col items-center text-center px-4 py-10 animate-in fade-in duration-300">
+                  <Loader2 size={36} className="text-blue-500 animate-spin mb-5" />
+                  <p className="text-base font-semibold text-slate-800 mb-1">{dict.reportGen.generating}</p>
+                  <p className="text-xs text-gray-400">{dict.reportGen.generatingSub}</p>
                 </div>
               )}
 
               {/* ── Phase: intake ── */}
               {phase === 'intake' && (
-                <div className="animate-in fade-in duration-300">
+                <div className="p-4 animate-in fade-in duration-300">
                   <StepDots current={intakeStep} total={3} />
                   <p className="text-center text-xs text-gray-400 mb-4">
                     {['step1Title','step2Title','step3Title'].map((k,i) => (
@@ -475,6 +659,19 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
                           className="mt-1 w-full text-sm border border-gray-100 rounded-xl px-3 py-2.5 outline-none focus:border-blue-300 bg-gray-50 resize-none"
                         />
                       </div>
+                      {/* 补充图片上传 */}
+                      <div>
+                        <label className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 block">{d.uploadImages}</label>
+                        <UploadButton
+                          inputRef={intakeFileInputRef}
+                          uploading={intakeUploading}
+                          urls={intakeImageUrls}
+                          label={d.uploadImages}
+                          labelUploading={dict.uploading}
+                          labelDone={uploadedLabel}
+                          onChange={handleIntakeFileChange}
+                        />
+                      </div>
                     </div>
                   )}
 
@@ -509,7 +706,9 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
 
                   <div className="flex items-center justify-between mt-5">
                     <button
-                      onClick={() => intakeStep === 0 ? setPhase('success') : setIntakeStep((s) => s - 1)}
+                      onClick={() => intakeStep === 0
+                        ? setPhase(isQuickReport && reportData ? 'report' : 'success')
+                        : setIntakeStep((s) => s - 1)}
                       className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 transition"
                     >
                       <ChevronLeft size={16} /> {d.back}
@@ -526,7 +725,7 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
                       <button
                         onClick={handleIntakeSubmit}
                         disabled={isIntakeSubmitting || !canAdvanceStep()}
-                        className="flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex-1 ml-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {isIntakeSubmitting ? d.submitting : d.submit}
                         {!isIntakeSubmitting && <ChevronRight size={16} />}
@@ -538,14 +737,13 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
 
               {/* ── Phase: done ── */}
               {phase === 'done' && (
-                <div className="flex flex-col items-center text-center py-4 animate-in fade-in zoom-in duration-300">
+                <div className="flex flex-col items-center text-center p-4 animate-in fade-in zoom-in duration-300">
                   <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-3">
                     <CheckCircle size={24} />
                   </div>
                   <h3 className="text-lg font-bold text-gray-800 mb-1">{d.doneTitle}</h3>
                   <p className="text-sm text-gray-500 max-w-sm">
-                    {d.doneDesc}<br />
-                    <span className="font-medium text-blue-600">{savedEmail}</span>
+                    {d.doneDesc}
                   </p>
                   <button
                     onClick={() => { setPhase('form'); setIntake({ species:'',breed:'',age:'',weight:'',sex:'',diagnosis:'',treatmentOptions:'',priority:'',budget:'',visitFreq:'' }); setIntakeStep(0); }}
@@ -603,6 +801,7 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
           </div>
 
         </div>
+        )}
       </section>
 
       <GuideModal isOpen={isGuideOpen} onClose={() => setIsGuideOpen(false)} dict={dict} />
