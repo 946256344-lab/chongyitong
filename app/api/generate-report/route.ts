@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import Anthropic from '@anthropic-ai/sdk';
 
-const KIMI_API_URL = 'https://api.moonshot.cn/v1/chat/completions';
+export const runtime = 'edge';
+
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 function buildPrompt(
   description: string,
   intake: Record<string, string> | null,
-  lang: string,
 ): string {
   const now = new Date();
   const dateStr = now.toISOString().split('T')[0];
   const reportId = `PM-${now.getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`;
-  const isZh = lang === 'zh';
 
   const intakeBlock = intake
     ? `
@@ -31,10 +32,11 @@ Additional pet information provided:
   return `You are a veterinary medical decision-support specialist.
 A pet owner has submitted the following information. Generate a structured decision guide in JSON format.
 
+IMPORTANT: Detect the language of the owner's description and generate ALL text fields in that exact same language. If the description is in English, respond in English. If in Chinese, respond in Chinese. If in any other language, respond in that language.
+
 Owner's description:
 "${description}"
 ${intakeBlock}
-Report language: ${isZh ? 'Chinese (Simplified)' : 'English'}
 Date: ${dateStr}
 
 Return ONLY a valid JSON object with this EXACT structure. No markdown, no code fences, no explanation:
@@ -78,48 +80,29 @@ Return ONLY a valid JSON object with this EXACT structure. No markdown, no code 
   "sources": ["Guideline or reference 1", "Reference 2"]
 }
 
-Generate 3–6 findings based on the described exam/report. Generate 2–3 treatment paths. All text must be in ${isZh ? 'Chinese' : 'English'}.`;
+Generate 3–6 findings based on the described exam/report. Generate 2–3 treatment paths.`;
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { description, intake, lang } = await req.json();
+    const { description, intake } = await req.json();
 
     if (!description) {
       return NextResponse.json({ error: 'Missing description' }, { status: 400 });
     }
 
-    const prompt = buildPrompt(description, intake ?? null, lang ?? 'en');
+    const prompt = buildPrompt(description, intake ?? null);
 
-    const response = await fetch(KIMI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.KIMI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'moonshot-v1-32k',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a veterinary medical report generator. You must respond with valid JSON only, no markdown, no explanation, no code fences.',
-          },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.3,
-        response_format: { type: 'json_object' },
-      }),
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 4096,
+      temperature: 0.3,
+      system: 'You are a veterinary medical report generator. You must respond with valid JSON only, no markdown, no explanation, no code fences.',
+      messages: [{ role: 'user', content: prompt }],
     });
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error('Kimi API error:', errText);
-      return NextResponse.json({ error: 'Kimi API error', detail: errText }, { status: 500 });
-    }
-
-    const data = await response.json();
-    const raw = data.choices?.[0]?.message?.content?.trim() ?? '';
-    console.log('Kimi raw response (first 300 chars):', raw.slice(0, 300));
+    const raw = (message.content[0] as { type: string; text: string }).text?.trim() ?? '';
+    console.log('Claude raw response (first 300 chars):', raw.slice(0, 300));
 
     // Extract the JSON object by locating the outermost { ... }
     const start = raw.indexOf('{');
@@ -131,7 +114,22 @@ export async function POST(req: NextRequest) {
 
     // Fix common LLM JSON mistakes before parsing
     const cleaned = raw.slice(start, end + 1)
-      .replace(/,(\s*[}\]])/g, '$1');  // remove trailing commas in objects/arrays
+      .replace(/^\uFEFF/, '')                                                  // BOM
+      .replace(/[\u201C\u201D\u300C\u300D\u201E\u201F]/g, '"')               // curly/CJK double quotes → "
+      .replace(/[\u2018\u2019\u300E\u300F]/g, "'")                           // curly/CJK single quotes → '
+      .replace(/：\s*"/g, ': "')                                              // Chinese colon before string
+      .replace(/：\s*([0-9[{])/g, ': $1')                                    // Chinese colon before number/array/obj
+      .replace(/,(\s*[}\]])/g, '$1')                                          // trailing commas
+      .replace(/,(\s*,)+/g, ',')                                              // duplicate commas
+      .replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":')       // unquoted keys
+      .replace(/":\s*'([^'\\]*(?:\\.[^'\\]*)*)'/g, '": "$1"')               // single-quoted values
+      .replace(/:\s*undefined\b/g, ': null')                                  // undefined → null
+      .replace(/:\s*None\b/g, ': null')                                       // Python None → null
+      .replace(/:\s*NaN\b/g, ': null')                                        // NaN → null
+      .replace(/:\s*Infinity\b/g, ': null')                                   // Infinity → null
+      .replace(/:\s*True\b/g, ': true')                                       // Python True → true
+      .replace(/:\s*False\b/g, ': false')                                     // Python False → false
+      .replace(/\\'/g, "'")                                                    // invalid escaped single quote
 
     let report: unknown;
     try {

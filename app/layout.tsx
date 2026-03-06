@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     template: "%s | 宠医通",
   },
   description: "看懂宠物医疗报告，理性评估治疗选择，安心与兽医沟通。",
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: '/icon.svg',
+  },
 };
 
 const organizationSchema = {

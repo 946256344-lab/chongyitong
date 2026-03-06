@@ -96,9 +96,8 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
           {/* 第一行：Logo + 右侧按钮 */}
           <div className="flex items-center justify-between h-14">
             <Link href={`/${currentLang}`} className="flex items-center gap-2 group">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform text-sm">
-                T
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icon.svg" alt="logo" className="w-9 h-9 group-hover:scale-105 transition-transform drop-shadow-md" />
               <span className="text-base font-bold text-gray-900">
                 {brandMain || dict?.slogan}
               </span>
@@ -117,9 +116,8 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
           {/* 左侧 Logo */}
           <div className="absolute left-0">
             <Link href={`/${currentLang}`} className="flex items-center gap-2 group">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                T
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icon.svg" alt="logo" className="w-10 h-10 group-hover:scale-105 transition-transform drop-shadow-md" />
               <span className="text-xl font-bold text-gray-900">
                 {brandMain || dict?.slogan}
                 {brandSub && (

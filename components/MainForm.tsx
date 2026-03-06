@@ -443,9 +443,8 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
           {/* Logo */}
           <div className="mb-8 text-center">
             <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-blue-200">
-                T
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icon.svg" alt="logo" className="w-9 h-9 drop-shadow-md" />
               <span className="text-2xl font-bold text-slate-800">{dict.slogan}</span>
             </div>
           </div>
