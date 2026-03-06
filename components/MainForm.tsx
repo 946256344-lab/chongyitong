@@ -3,6 +3,49 @@ import { useRouter } from 'next/navigation';
 import { useState, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import React from 'react';
+
+// ── JSON cleaning ──────────────────────────────────────────────────────────
+function cleanJson(raw: string): string {
+  const start = raw.indexOf('{');
+  const end   = raw.lastIndexOf('}');
+  if (start === -1 || end === -1 || end < start) throw new Error('No JSON object found');
+  return raw.slice(start, end + 1)
+    .replace(/^\uFEFF/, '')
+    .replace(/[\u201C\u201D\u300C\u300D\u201E\u201F]/g, '"')
+    .replace(/[\u2018\u2019\u300E\u300F]/g, "'")
+    .replace(/：\s*"/g, ': "')
+    .replace(/：\s*([0-9[{])/g, ': $1')
+    .replace(/,(\s*[}\]])/g, '$1')
+    .replace(/,(\s*,)+/g, ',')
+    .replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":')
+    .replace(/":\s*'([^'\\]*(?:\\.[^'\\]*)*)'/g, '": "$1"')
+    .replace(/:\s*undefined\b/g, ': null')
+    .replace(/:\s*None\b/g, ': null')
+    .replace(/:\s*NaN\b/g, ': null')
+    .replace(/:\s*Infinity\b/g, ': null')
+    .replace(/:\s*True\b/g, ': true')
+    .replace(/:\s*False\b/g, ': false')
+    .replace(/\\'/g, "'");
+}
+
+// ── Read streaming response and parse as JSON ─────────────────────────────
+async function readReportStream(res: Response): Promise<ReportData> {
+  if (!res.ok) {
+    const json = await res.json();
+    throw new Error(`${json.error ?? 'failed'} | ${json.detail ?? ''}`);
+  }
+  const reader = res.body!.getReader();
+  const decoder = new TextDecoder();
+  let raw = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    raw += decoder.decode(value, { stream: true });
+  }
+  const report = JSON.parse(cleanJson(raw)) as ReportData & { __stream_error?: string };
+  if (report.__stream_error) throw new Error(report.__stream_error);
+  return report;
+}
 import {
   Image as ImageIcon, Send, CheckCircle, HelpCircle, X,
   ChevronRight, ChevronLeft, Twitter, Github, Disc, Loader2, Zap, ClipboardList,
@@ -243,9 +286,8 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description: savedDescription, intake: null, lang }),
       });
-      const json = await res.json();
-      if (!res.ok || !json.report) throw new Error(`${json.error ?? 'failed'} | ${json.detail ?? ''}`);
-      setReportData(json.report);
+      const report = await readReportStream(res);
+      setReportData(report);
       setPhase('report');
     } catch (err) {
       console.error(err);
@@ -285,9 +327,8 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description: savedDescription, intake, lang }),
       });
-      const json = await res.json();
-      if (!res.ok || !json.report) throw new Error(`${json.error ?? 'failed'} | ${json.detail ?? ''}`);
-      setReportData(json.report);
+      const report = await readReportStream(res);
+      setReportData(report);
       setPhase('report');
     } catch (error) {
       console.error(error);
@@ -516,7 +557,26 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
 
                   {/* 两个选项卡 */}
                   <div className="w-full flex flex-col gap-3">
-                    {/* Option A：快速报告 */}
+                    {/* Option B：完整报告（主推） */}
+                    <button
+                      onClick={() => { setIntakeStep(0); setPhase('intake'); }}
+                      className="w-full flex items-start gap-4 p-6 bg-gradient-to-br from-blue-500/80 to-blue-600/80 hover:from-blue-500/80 hover:to-blue-700 rounded-2xl text-left transition-all group relative overflow-hidden"
+                    >
+                      {/* 推荐角标 */}
+                      <span className="absolute top-3 right-3 text-[10px] font-bold text-blue-700 bg-white px-2 py-0.5 rounded-full">
+                        {dict.reportGen.recommended ?? '推荐'}
+                      </span>
+                      <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <ClipboardList size={22} className="text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0 pr-10">
+                        <p className="text-base font-bold text-white mb-1">{dict.reportGen.optionBTitle}</p>
+                        <p className="text-sm text-slate-300">{dict.reportGen.optionBDesc}</p>
+                      </div>
+                      <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-0.5 transition-transform mt-1 flex-shrink-0" />
+                    </button>
+
+                    {/* Option A：快速报告（次要） */}
                     <button
                       onClick={handleQuickGenerate}
                       className="w-full flex items-start gap-4 p-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-left transition-all group"
@@ -529,21 +589,6 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
                         <p className="text-xs text-gray-500">{dict.reportGen.optionADesc}</p>
                       </div>
                       <ChevronRight size={16} className="text-blue-400 group-hover:translate-x-0.5 transition-transform mt-2 flex-shrink-0" />
-                    </button>
-
-                    {/* Option B：完整报告 */}
-                    <button
-                      onClick={() => { setIntakeStep(0); setPhase('intake'); }}
-                      className="w-full flex items-start gap-4 p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl text-left transition-all group"
-                    >
-                      <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <ClipboardList size={18} className="text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-slate-800 mb-0.5">{dict.reportGen.optionBTitle}</p>
-                        <p className="text-xs text-gray-500">{dict.reportGen.optionBDesc}</p>
-                      </div>
-                      <ChevronRight size={16} className="text-gray-400 group-hover:translate-x-0.5 transition-transform mt-2 flex-shrink-0" />
                     </button>
                   </div>
                 </div>

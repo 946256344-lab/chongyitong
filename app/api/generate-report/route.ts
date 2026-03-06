@@ -93,53 +93,42 @@ export async function POST(req: NextRequest) {
 
     const prompt = buildPrompt(description, intake ?? null);
 
-    const message = await client.messages.create({
+    // Stream Claude's output directly to the client so Vercel's 25s
+    // "initial response" timer is satisfied within the first token (~1-2s).
+    const claudeStream = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 4096,
       temperature: 0.3,
+      stream: true,
       system: 'You are a veterinary medical report generator. You must respond with valid JSON only, no markdown, no explanation, no code fences.',
       messages: [{ role: 'user', content: prompt }],
     });
 
-    const raw = (message.content[0] as { type: string; text: string }).text?.trim() ?? '';
-    console.log('Claude raw response (first 300 chars):', raw.slice(0, 300));
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const event of claudeStream) {
+            if (
+              event.type === 'content_block_delta' &&
+              event.delta.type === 'text_delta'
+            ) {
+              controller.enqueue(encoder.encode(event.delta.text));
+            }
+          }
+        } catch (err) {
+          // Encode error as a sentinel the client can detect
+          controller.enqueue(
+            encoder.encode(`\n{"__stream_error":"${String(err).replace(/"/g, '\\"')}"}`),
+          );
+        }
+        controller.close();
+      },
+    });
 
-    // Extract the JSON object by locating the outermost { ... }
-    const start = raw.indexOf('{');
-    const end   = raw.lastIndexOf('}');
-    if (start === -1 || end === -1 || end < start) {
-      console.error('No JSON object in response. Raw:', raw.slice(0, 500));
-      return NextResponse.json({ error: 'Model returned no JSON', detail: raw.slice(0, 200) }, { status: 500 });
-    }
-
-    // Fix common LLM JSON mistakes before parsing
-    const cleaned = raw.slice(start, end + 1)
-      .replace(/^\uFEFF/, '')                                                  // BOM
-      .replace(/[\u201C\u201D\u300C\u300D\u201E\u201F]/g, '"')               // curly/CJK double quotes → "
-      .replace(/[\u2018\u2019\u300E\u300F]/g, "'")                           // curly/CJK single quotes → '
-      .replace(/：\s*"/g, ': "')                                              // Chinese colon before string
-      .replace(/：\s*([0-9[{])/g, ': $1')                                    // Chinese colon before number/array/obj
-      .replace(/,(\s*[}\]])/g, '$1')                                          // trailing commas
-      .replace(/,(\s*,)+/g, ',')                                              // duplicate commas
-      .replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":')       // unquoted keys
-      .replace(/":\s*'([^'\\]*(?:\\.[^'\\]*)*)'/g, '": "$1"')               // single-quoted values
-      .replace(/:\s*undefined\b/g, ': null')                                  // undefined → null
-      .replace(/:\s*None\b/g, ': null')                                       // Python None → null
-      .replace(/:\s*NaN\b/g, ': null')                                        // NaN → null
-      .replace(/:\s*Infinity\b/g, ': null')                                   // Infinity → null
-      .replace(/:\s*True\b/g, ': true')                                       // Python True → true
-      .replace(/:\s*False\b/g, ': false')                                     // Python False → false
-      .replace(/\\'/g, "'")                                                    // invalid escaped single quote
-
-    let report: unknown;
-    try {
-      report = JSON.parse(cleaned);
-    } catch (parseErr) {
-      console.error('JSON.parse failed:', parseErr, '\nCleaned slice:', cleaned.slice(0, 500));
-      return NextResponse.json({ error: 'Invalid JSON from model', detail: String(parseErr) }, { status: 500 });
-    }
-
-    return NextResponse.json({ report });
+    return new Response(readable, {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
   } catch (error) {
     console.error('generate-report error:', error);
     return NextResponse.json({ error: 'Failed to generate report', detail: String(error) }, { status: 500 });

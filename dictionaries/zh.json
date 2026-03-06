@@ -75,6 +75,7 @@
     "optionBTitle": "生成完整版报告",
     "optionBDesc": "再回答几个问题，获得更详尽的个性化分析",
     "optionBBtn": "填写详情",
+    "recommended": "推荐",
     "generating": "正在为您生成报告，请稍候……",
     "generatingSub": "通常需要 30 秒左右",
     "error": "生成失败，请重试",

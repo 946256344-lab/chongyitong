@@ -73,6 +73,7 @@
     "optionBTitle": "Full Report",
     "optionBDesc": "Answer a few more questions for a comprehensive, personalized analysis",
     "optionBBtn": "Add details",
+    "recommended": "Recommended",
     "generating": "Generating your report, please wait…",
     "generatingSub": "This usually takes around 30 seconds",
     "error": "Generation failed, please try again",
