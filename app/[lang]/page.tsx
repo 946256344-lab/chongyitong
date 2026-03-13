@@ -32,9 +32,9 @@ export async function generateMetadata({
     keywords: ['宠物医疗', '宠物健康', '兽医咨询'],
   };
 
-  const appName = lang === 'zh' ? '宠医通 | 决策助手' : 'Pet Med-Pal | Decision Assistant';
-  const teamName = lang === 'zh' ? '宠医通团队' : 'Pet Med-Pal Team';
-  const siteName = lang === 'zh' ? '宠医通' : 'Pet Med-Pal';
+  const appName = lang === 'zh' ? '宠医通 | 决策助手' : 'VetDecide AI | Decision Assistant';
+  const teamName = lang === 'zh' ? '宠医通团队' : 'VetDecide AI Team';
+  const siteName = lang === 'zh' ? '宠医通' : 'VetDecide AI';
 
   return {
     applicationName: appName,

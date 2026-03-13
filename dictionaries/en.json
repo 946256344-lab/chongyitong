@@ -1,7 +1,7 @@
 {
   "seo": {
-    "title": "Pet Med-Pal | Your Smart Pet Health Decision Assistant",
-    "description": "Confused by pet medical reports? Pet Med-Pal helps you understand them, provides professional treatment advice, and facilitates smooth communication with your vet.",
+    "title": "VetDecide AI | Your Smart Pet Health Decision Assistant",
+    "description": "Confused by pet medical reports? VetDecide AI helps you understand them, provides professional treatment advice, and facilitates smooth communication with your vet.",
     "keywords": [
       "pet health",
       "severe pet condition",
@@ -11,7 +11,7 @@
       "dog health"
     ]
   },
-  "slogan": "PetMed Navigator | Decision Assistant",
+  "slogan": "VetDecide AI | Decision Assistant",
   "subSlogan": "Understand veterinary medical reports, evaluate treatment options rationally, and communicate with your vet with confidence",
   "emailPlaceholder": "Your email address (used to receive the report)",
   "formLabel": "Patient Description",
@@ -44,7 +44,14 @@
     "subline": "Upload your vet report. We translate the findings into plain language, map your treatment options, and prepare the questions you need to ask.",
     "cta": "Submit your report",
     "card1": "⚡ Results in 24h",
-    "card2": "✓ Expert-reviewed"
+    "card2": "✓ Expert-reviewed",
+    "tryExample": "Try an example:",
+    "examples": [
+      "Cat diagnosed with HCM, occasional labored breathing, vet recommends medication",
+      "Dog post-surgery, not eating well, lethargic for 3 days",
+      "Vet suspects chronic kidney disease — bloodwork attached",
+      "Cat has a suspected tumor, weighing surgery vs. palliative care"
+    ]
   },
   "howItWorks": {
     "title": "How it works",
@@ -83,7 +90,7 @@
   },
   "guide": {
     "title": "How It Works",
-    "p1": "Welcome to PetMed Navigator | Decision Assistant. Please follow the steps below:",
+    "p1": "Welcome to VetDecide AI | Decision Assistant. Please follow the steps below:",
     "step1": "Upload or paste your pet's medical report (blood tests, imaging, or veterinary conclusions are all acceptable)",
     "step2": "Briefly describe your pet's situation (age, symptoms, quality of life, and your budget)",
     "step3": "After submission, you will receive a personalized \"Decision Guide\"",

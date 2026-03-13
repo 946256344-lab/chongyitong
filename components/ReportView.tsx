@@ -400,7 +400,7 @@ function Disclaimer({ data, lang }: { data: ReportData; lang: string }) {
       style={{ borderColor: '#e2e8f0' }}
     >
       <p>{text}</p>
-      <p className="mt-2">© Pet Med-Pal ｜ Report ID {data.report_id}</p>
+      <p className="mt-2">© VetDecide AI ｜ Report ID {data.report_id}</p>
     </div>
   );
 }

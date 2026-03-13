@@ -15,7 +15,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const isZh = lang === 'zh';
-  const title = isZh ? '真实案例 | 宠医通' : 'Case Reports | Pet Med-Pal';
+  const title = isZh ? '真实案例 | 宠医通' : 'Case Reports | VetDecide AI';
   const description = isZh
     ? '真实宠物病例解读，帮助主人理解诊断结果、评估治疗选项，理性与兽医沟通。'
     : 'Real pet case reports with expert interpretation — understand diagnoses, evaluate treatment options, and communicate confidently with your vet.';
@@ -36,7 +36,7 @@ export async function generateMetadata({
       url: `/${lang}/cases`,
       title,
       description,
-      siteName: isZh ? '宠医通' : 'Pet Med-Pal',
+      siteName: isZh ? '宠医通' : 'VetDecide AI',
       locale: isZh ? 'zh_CN' : 'en_US',
     },
     twitter: { card: 'summary_large_image', title, description },

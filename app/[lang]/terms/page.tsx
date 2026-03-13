@@ -47,7 +47,7 @@ const content = {
     sections: [
       {
         heading: '1. Service Description',
-        body: 'Pet Med-Pal ("the Platform") provides pet medical report interpretation and treatment decision support services. These services are reviewed and processed by human specialists to help pet owners better understand veterinary reports and prepare for informed conversations with their vets.',
+        body: 'VetDecide AI ("the Platform") provides pet medical report interpretation and treatment decision support services. These services are reviewed and processed by human specialists to help pet owners better understand veterinary reports and prepare for informed conversations with their vets.',
       },
       {
         heading: '2. Pricing & Refund',

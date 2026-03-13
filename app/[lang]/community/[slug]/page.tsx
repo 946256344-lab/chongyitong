@@ -46,7 +46,7 @@ export async function generateMetadata({
       url: canonical,
       title,
       description,
-      siteName: lang === 'zh' ? '宠医通' : 'Pet Med-Pal',
+      siteName: lang === 'zh' ? '宠医通' : 'VetDecide AI',
       locale: lang === 'zh' ? 'zh_CN' : 'en_US',
       publishedTime: data.date,
     },

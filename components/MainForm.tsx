@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import React from 'react';
 
@@ -54,10 +54,10 @@ import { Dictionary } from '@/app/dictionaries';
 import Link from 'next/link';
 import GuideModal from './GuideModal';
 import type { FeaturedCase } from '@/app/[lang]/page';
-import ReportView, { type ReportData } from './ReportView';
+import { type ReportData } from './ReportView';
 
 // ── 阶段状态 ─────────────────────────────────────────────
-type Phase = 'form' | 'success' | 'generating' | 'report' | 'intake' | 'done';
+type Phase = 'form' | 'success' | 'generating' | 'intake' | 'done';
 
 interface IntakeData {
   species: string;
@@ -177,9 +177,29 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   const [phase, setPhase]               = useState<Phase>('form');
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [savedDescription, setSavedDescription] = useState('');
-  const [reportData, setReportData]     = useState<ReportData | null>(null);
   const [generateError, setGenerateError] = useState(false);
-  const [isQuickReport, setIsQuickReport] = useState(false);
+
+  // ── 打字机效果 ───────────────────────────────────────────
+  const headlineFull =
+    dict.hero.headlineBefore + dict.hero.headlineHighlight + dict.hero.headlineAfter;
+  const hlStart = dict.hero.headlineBefore.length;
+  const hlEnd   = hlStart + dict.hero.headlineHighlight.length;
+  const [typeCount, setTypeCount] = useState(0);
+
+  useEffect(() => {
+    if (typeCount < headlineFull.length) {
+      const t = setTimeout(() => setTypeCount((n) => n + 1), 55);
+      return () => clearTimeout(t);
+    } else {
+      const t = setTimeout(() => setTypeCount(0), 10000);
+      return () => clearTimeout(t);
+    }
+  }, [typeCount, headlineFull.length]);
+
+  const typedBefore    = headlineFull.slice(0, Math.min(typeCount, hlStart));
+  const typedHighlight = headlineFull.slice(hlStart, Math.min(typeCount, hlEnd));
+  const typedAfter     = headlineFull.slice(hlEnd, typeCount);
+  const isDone         = typeCount >= headlineFull.length;
 
   // Intake state
   const [intakeStep, setIntakeStep]               = useState(0);
@@ -278,7 +298,6 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   // ── 快速生成报告（仅基础信息）────────────────────────────
   const handleQuickGenerate = async () => {
     setGenerateError(false);
-    setIsQuickReport(true);
     setPhase('generating');
     try {
       const res = await fetch('/api/generate-report', {
@@ -287,12 +306,15 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         body: JSON.stringify({ description: savedDescription, intake: null, lang }),
       });
       const report = await readReportStream(res);
-      setReportData(report);
-      setPhase('report');
+      const { token } = await fetch('/api/save-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang, data: report }),
+      }).then((r) => r.json());
+      router.push(`/${lang}/report/${token}`);
     } catch (err) {
       console.error(err);
       setGenerateError(true);
-      setIsQuickReport(false);
       setPhase('success');
     }
   };
@@ -301,7 +323,6 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   const handleIntakeSubmit = async () => {
     setIsIntakeSubmitting(true);
     setGenerateError(false);
-    setIsQuickReport(false);
     try {
       if (submissionId) {
         await supabase
@@ -328,8 +349,12 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
         body: JSON.stringify({ description: savedDescription, intake, lang }),
       });
       const report = await readReportStream(res);
-      setReportData(report);
-      setPhase('report');
+      const { token } = await fetch('/api/save-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lang, data: report }),
+      }).then((r) => r.json());
+      router.push(`/${lang}/report/${token}`);
     } catch (error) {
       console.error(error);
       setGenerateError(true);
@@ -354,141 +379,38 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
   return (
     <div className="bg-white text-gray-800 font-sans">
 
-      {/* ══ Screen 1: Hero ══════════════════════════════════ */}
-      <section className="bg-[#fdf8f3]">
-        <div className="min-h-screen max-w-6xl mx-auto flex flex-col md:flex-row md:items-center px-6 lg:px-12 pt-32 md:pt-0 pb-12 md:pb-0 gap-10 md:gap-16">
+      {/* ══ Form / Report ═════════════════════════ */}
+      <section id="form" className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-[#f8f9fc]">
 
-          {/* 文字：手机端在上，桌面端左侧 */}
-          <div className="flex-1 flex flex-col items-start text-left">
-            {/* 徽章 */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-gray-100 shadow-sm text-xs text-gray-500 font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
-              {dict.hero.badge}
-            </div>
+        <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
 
-            {/* 标题 */}
-            <h1 className="text-6xl md:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight mb-5">
-              {dict.hero.headlineBefore}
-              <span className="text-blue-600">{dict.hero.headlineHighlight}</span>
-              {dict.hero.headlineAfter}
-            </h1>
-
-            {/* 副标题 */}
-            <p className="text-base text-gray-500 leading-relaxed mb-8 max-w-md">
-              {dict.hero.subline}
-            </p>
-
-            {/* CTA */}
-            <a
-              href="#form"
-              className="w-full md:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-2xl text-base font-semibold transition-all shadow-xl shadow-slate-200 hover:shadow-slate-300 hover:-translate-y-0.5"
-            >
-              {dict.hero.cta} <ChevronRight size={18} strokeWidth={2.5} />
-            </a>
-          </div>
-
-          {/* 图片：手机端在下，桌面端右侧，浮动卡片装饰 */}
-          <div className="relative flex-shrink-0 self-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=700&fit=crop&q=80"
-              alt="A pet"
-              className="w-full md:w-[400px] h-[260px] md:h-[500px] object-cover rounded-2xl md:rounded-3xl shadow-xl shadow-slate-200"
-            />
-            {/* 浮动卡片 1 */}
-            <div className="absolute bottom-4 left-4 bg-white rounded-xl px-3 py-2 shadow-lg flex items-center gap-1.5 text-xs font-semibold text-slate-700">
-              {dict.hero.card1}
-            </div>
-            {/* 浮动卡片 2 */}
-            <div className="absolute top-4 right-4 bg-white rounded-xl px-3 py-2 shadow-lg flex items-center gap-1.5 text-xs font-semibold text-slate-700">
-              {dict.hero.card2}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ══ Screen 2: How it works ══════════════════════════ */}
-      <section
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-[#f8f9fc] overflow-hidden"
-        style={{ backgroundImage: 'radial-gradient(#e2e8f0 1.5px, transparent 1.5px)', backgroundSize: '28px 28px' }}
-      >
-        {/* 角落柔光色块 */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-
-        <h2 className="relative text-2xl md:text-3xl font-bold text-slate-800 mb-16 md:mb-20 text-center">
-          {dict.howItWorks.title}
-        </h2>
-        <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 max-w-4xl w-full">
-          {dict.howItWorks.steps.map((step) => (
-            <div key={step.num} className="flex flex-col gap-4">
-              <span className="text-7xl md:text-8xl font-black text-gray-200 leading-none select-none">
-                {step.num}
+          {/* ── Hero 标题区（仅 form 阶段显示） ── */}
+          {phase === 'form' ? (
+            <div className="mb-10 text-center">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full mb-5">
+                {dict.hero.badge}
               </span>
-              <h3 className="text-lg font-semibold text-slate-800">{step.title}</h3>
-              <p className="text-base text-gray-400 leading-relaxed">{step.desc}</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight mb-4 min-h-[2.6em]">
+                {typedBefore}
+                <span className="text-blue-600">{typedHighlight}</span>
+                {typedAfter}
+                {!isDone && (
+                  <span className="inline-block w-[2px] h-[1em] bg-slate-900 ml-0.5 align-middle animate-pulse" />
+                )}
+              </h1>
+              <p className="text-base text-gray-500 max-w-md mx-auto leading-relaxed">
+                {dict.hero.subline}
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══ Screen 3: Form / Report ═════════════════════════ */}
-      <section id="form" className="min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-gradient-to-b from-[#fdf8f3] to-white">
-
-        {/* ── report 阶段：全宽展示 ReportView ── */}
-        {phase === 'report' && reportData && (
-          <div className="w-full max-w-4xl mx-auto">
-            <ReportView data={reportData} lang={lang} mode={isQuickReport ? 'quick' : 'full'} />
-
-            {/* 快速报告升级提示 */}
-            {isQuickReport && (
-              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl text-center">
-                <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                  {dict.reportGen.upgradeHint}
-                </p>
-                <button
-                  onClick={() => { setIntakeStep(0); setPhase('intake'); }}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl text-sm font-semibold transition shadow-sm shadow-blue-200"
-                >
-                  <ClipboardList size={16} />
-                  {dict.reportGen.upgradeBtn}
-                  <ChevronRight size={15} />
-                </button>
+          ) : (
+            <div className="mb-8 text-center">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon.svg" alt="logo" className="w-9 h-9 drop-shadow-md" />
+                <span className="text-2xl font-bold text-slate-800">{dict.slogan}</span>
               </div>
-            )}
-
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => {
-                  setPhase('form');
-                  setReportData(null);
-                  setIsQuickReport(false);
-                  setImageUrls([]);
-                  setIntakeImageUrls([]);
-                  setIntake({ species:'',breed:'',age:'',weight:'',sex:'',diagnosis:'',treatmentOptions:'',priority:'',budget:'',visitFreq:'' });
-                  setIntakeStep(0);
-                }}
-                className="text-sm text-gray-400 hover:text-gray-600 transition underline"
-              >
-                {dict.reportGen.restart}
-              </button>
             </div>
-          </div>
-        )}
-
-        {/* ── 其他阶段：表单卡片 ── */}
-        {phase !== 'report' && (
-        <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
-
-          {/* Logo */}
-          <div className="mb-8 text-center">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon.svg" alt="logo" className="w-9 h-9 drop-shadow-md" />
-              <span className="text-2xl font-bold text-slate-800">{dict.slogan}</span>
-            </div>
-          </div>
+          )}
 
           {/* 卡片区域 */}
           <div className="w-full relative group">
@@ -751,7 +673,7 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
                   <div className="flex items-center justify-between mt-5">
                     <button
                       onClick={() => intakeStep === 0
-                        ? setPhase(isQuickReport && reportData ? 'report' : 'success')
+                        ? setPhase('success')
                         : setIntakeStep((s) => s - 1)}
                       className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 transition"
                     >
@@ -801,6 +723,25 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
             </div>
           </div>
 
+          {/* 示例 chips（仅 form 阶段） */}
+          {phase === 'form' && dict.hero.examples && (
+            <div className="mt-5 w-full">
+              <p className="text-xs text-gray-400 mb-2.5">{dict.hero.tryExample}</p>
+              <div className="flex flex-wrap gap-2">
+                {(dict.hero.examples as string[]).map((ex) => (
+                  <button
+                    key={ex}
+                    type="button"
+                    onClick={() => setDescription(ex)}
+                    className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                  >
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* 退款保证 */}
           <p className="mt-3 text-xs text-gray-400 text-center">↩ {dict.trust.guarantee}</p>
 
@@ -841,11 +782,10 @@ export default function MainForm({ dict, lang, featuredCases }: { dict: Dictiona
               <span>·</span>
               <Link href={`/${lang}/terms`} className="hover:text-gray-500 transition">Terms of Service</Link>
             </div>
-            <p className="text-xs text-gray-300">© 2026 Pet Med-Pal. All rights reserved.</p>
+            <p className="text-xs text-gray-300">© 2026 VetDecide AI. All rights reserved.</p>
           </div>
 
         </div>
-        )}
       </section>
 
       <GuideModal isOpen={isGuideOpen} onClose={() => setIsGuideOpen(false)} dict={dict} />

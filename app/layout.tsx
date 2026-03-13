@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "宠医通 | Pet Med-Pal",
+    default: "宠医通 | VetDecide AI",
     template: "%s | 宠医通",
   },
   description: "看懂宠物医疗报告，理性评估治疗选择，安心与兽医沟通。",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "宠医通 Pet Med-Pal",
+  name: "宠医通 VetDecide AI",
   url: "https://severepetcondition.site",
   description:
     "帮助宠物主人看懂医疗报告、理性评估治疗选项、与兽医有效沟通的决策工具。",

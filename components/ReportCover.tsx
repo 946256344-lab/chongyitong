@@ -9,7 +9,7 @@ export default function ReportCover({ data, lang }: Props) {
   const isZh = lang === 'zh';
 
   const labels = {
-    brand:        'Pet Med-Pal',
+    brand:        'VetDecide AI',
     tagline:      isZh ? '宠物医疗决策助手' : 'Your Pet Medical Decision Companion',
     reportTitle:  isZh ? '健康评估报告' : 'Health Assessment Report',
     petLabel:     isZh ? '患者' : 'Patient',
@@ -19,7 +19,7 @@ export default function ReportCover({ data, lang }: Props) {
     completedLabel:isZh ? '完成时间' : 'Completed',
     notice:       isZh
       ? '本报告由宠医通专家根据主人提交材料出具，仅供参考，不构成医疗诊断。'
-      : 'Prepared by a Pet Med-Pal specialist based on owner-submitted materials. For informational use only.',
+      : 'Prepared by a VetDecide AI specialist based on owner-submitted materials. For informational use only.',
     confidential: isZh ? '本报告为委托人专属文件，请妥善保管。' : 'This report is issued exclusively for the submitting owner.',
   };
 

@@ -15,7 +15,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const isZh = lang === 'zh';
-  const title = isZh ? '宠主社区 | 宠医通' : 'Community | Pet Med-Pal';
+  const title = isZh ? '宠主社区 | 宠医通' : 'Community | VetDecide AI';
   const description = isZh
     ? '宠主经验分享，记录与慢性病、手术、老龄宠物同行的真实故事，互相支持与启发。'
     : 'Pet owner stories — honest experiences living with chronic illness, surgeries, and aging pets. Support and inspiration from the community.';
@@ -36,7 +36,7 @@ export async function generateMetadata({
       url: `/${lang}/community`,
       title,
       description,
-      siteName: isZh ? '宠医通' : 'Pet Med-Pal',
+      siteName: isZh ? '宠医通' : 'VetDecide AI',
       locale: isZh ? 'zh_CN' : 'en_US',
     },
     twitter: { card: 'summary_large_image', title, description },

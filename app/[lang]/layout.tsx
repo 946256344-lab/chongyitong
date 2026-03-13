@@ -18,7 +18,7 @@ export default async function LangLayout({
     <>
       <HtmlLangUpdater lang={lang} />
       <Navbar lang={lang} dict={dict} />
-      <main className="flex-grow">
+      <main className="flex-grow pt-14 md:pt-20">
         {children}
       </main>
       <footer className="border-t border-gray-100 py-5 text-center text-sm text-gray-400">
