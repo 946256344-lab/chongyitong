@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 // 支持的语言
 const locales = ["en", "zh"];
-const defaultLocale = "zh";
+const defaultLocale = "en";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     // Note: lang attribute is overridden per-language via [lang]/layout.tsx template
     // Default "zh" covers majority of traffic
-    <html lang="zh">
+    <html lang="en">
       <head>
         <script
           id="organization-schema"

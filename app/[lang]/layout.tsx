@@ -11,7 +11,7 @@ export default async function LangLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const resolvedParams = await params;
-  const lang = resolvedParams?.lang === "en" ? "en" : "zh";
+  const lang = resolvedParams?.lang === "zh" ? "zh" : "en";
   const dict = await getDictionary(lang);
 
   return (
