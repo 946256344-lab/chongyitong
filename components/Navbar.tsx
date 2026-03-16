@@ -5,14 +5,15 @@ import { HelpCircle, User } from 'lucide-react';
 import { useState } from 'react';
 import en from '@/dictionaries/en.json';
 import zh from '@/dictionaries/zh.json';
+import hi from '@/dictionaries/hi.json';
 import GuideModal from './GuideModal';
 
 export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const pathname = usePathname();
   const pathLang = pathname?.split('/')[1];
-  const currentLang = pathLang === 'en' || pathLang === 'zh' ? pathLang : lang;
-  const uiDict = currentLang === 'en' ? en : zh;
+  const currentLang = pathLang === 'en' || pathLang === 'zh' || pathLang === 'hi' ? pathLang : lang;
+  const uiDict = currentLang === 'en' ? en : currentLang === 'hi' ? hi : zh;
 
   const navLinks = [
     { name: uiDict?.nav?.home, href: `/${currentLang}` },
@@ -27,12 +28,11 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
   function switchLang() {
     const path = window.location.pathname;
     const segments = path.split('/');
-    if (segments[1] === 'zh') {
-      segments[1] = 'en';
-    } else if (segments[1] === 'en') {
-      segments[1] = 'zh';
+    const cycle: Record<string, string> = { zh: 'en', en: 'hi', hi: 'zh' };
+    if (cycle[segments[1]]) {
+      segments[1] = cycle[segments[1]];
     } else {
-      segments.splice(1, 0, currentLang === 'zh' ? 'en' : 'zh');
+      segments.splice(1, 0, 'en');
     }
     window.location.href = segments.join('/') || '/';
   }
@@ -77,11 +77,12 @@ export default function Navbar({ lang, dict }: { lang: string; dict: any }) {
       )}
       <button
         onClick={switchLang}
+        aria-label="Switch language"
         className="w-10 h-10 flex items-center justify-center text-xs font-bold text-gray-500 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors uppercase"
       >
-        {currentLang === 'zh' ? 'EN' : '中文'}
+        {{ zh: 'EN', en: 'HI', hi: '中' }[currentLang] ?? 'EN'}
       </button>
-      <button className="w-10 h-10 bg-gray-900 flex items-center justify-center rounded-xl text-white hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
+      <button aria-label="User account" className="w-10 h-10 bg-gray-900 flex items-center justify-center rounded-xl text-white hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200">
         <User size={20} />
       </button>
     </div>

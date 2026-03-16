@@ -13,7 +13,7 @@ export type FeaturedCase = {
 };
 
 type Props = {
-  params: Promise<{ lang: 'en' | 'zh' }>;
+  params: Promise<{ lang: 'en' | 'zh' | 'hi' }>;
 };
 
 const BASE_URL = 'https://severepetcondition.site';

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const BASE_URL = 'https://severepetcondition.site';
-const LANGS = ['zh', 'en'] as const;
+const LANGS = ['zh', 'en', 'hi'] as const;
 
 function getSlugs(section: 'cases' | 'community'): string[] {
   // Collect slugs from zh folder (authoritative list; en should mirror it)
@@ -24,14 +24,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: 1,
-    alternates: { languages: { 'en-US': `${BASE_URL}/en` } },
+    alternates: { languages: { 'en-US': `${BASE_URL}/en`, 'hi-IN': `${BASE_URL}/hi` } },
   });
   entries.push({
     url: `${BASE_URL}/en`,
     lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: 1,
-    alternates: { languages: { 'zh-CN': `${BASE_URL}/zh` } },
+    alternates: { languages: { 'zh-CN': `${BASE_URL}/zh`, 'hi-IN': `${BASE_URL}/hi` } },
+  });
+  entries.push({
+    url: `${BASE_URL}/hi`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 1,
+    alternates: { languages: { 'zh-CN': `${BASE_URL}/zh`, 'en-US': `${BASE_URL}/en` } },
   });
 
   // ─── Cases list pages ─────────────────────────────────────────
@@ -45,6 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           'zh-CN': `${BASE_URL}/zh/cases`,
           'en-US': `${BASE_URL}/en/cases`,
+          'hi-IN': `${BASE_URL}/hi/cases`,
         },
       },
     });
@@ -80,6 +88,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           'zh-CN': `${BASE_URL}/zh/community`,
           'en-US': `${BASE_URL}/en/community`,
+          'hi-IN': `${BASE_URL}/hi/community`,
         },
       },
     });
@@ -115,6 +124,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           'zh-CN': `${BASE_URL}/zh/terms`,
           'en-US': `${BASE_URL}/en/terms`,
+          'hi-IN': `${BASE_URL}/hi/terms`,
         },
       },
     });
